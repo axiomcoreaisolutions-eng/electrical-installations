@@ -22,18 +22,18 @@ const homepage = await getHomepage();
 ---
 
 <Base title={category.seoTitle} description={category.seoDescription}>
-  <section class="bg-ink">
-    <div class="mx-auto max-w-[1200px] px-5 pt-16 pb-14 md:px-8 md:pt-24 md:pb-20">
-      <nav aria-label="Putanja" class="font-mono text-[0.75rem] tracking-[0.08em] text-mist">
-        <a href="/usluge" class="transition-colors hover:text-white">Usluge</a>
+  <section class="border-b border-line bg-porcelain">
+    <div class="mx-auto max-w-[1400px] px-5 pt-12 pb-14 md:px-8 md:pt-16 md:pb-20">
+      <nav aria-label="Putanja" class="border-b border-line pb-4 font-mono text-[0.75rem] tracking-[0.08em] text-slate uppercase">
+        <a href="/usluge" class="transition-colors hover:text-ink">Usluge</a>
         <span aria-hidden="true"> / </span>
-        <span class="text-white/80">Kategorija</span>
+        <span class="text-ink/80">Kategorija</span>
       </nav>
-      <h1 class="display mt-6 max-w-3xl text-(length:--text-display-xl) text-white">{category.title}</h1>
-      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-mist">{category.shortDescription}</p>
+      <h1 data-split class="display mt-8 max-w-4xl text-(length:--text-display-xl) text-ink">{category.title}</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate">{category.shortDescription}</p>
       <div class="mt-9 flex flex-wrap gap-3">
         <Button href="/kontakt" size="lg">Pošaljite upit</Button>
-        <Button href="/usluge" variant="ghost-dark" size="lg">Sve usluge</Button>
+        <Button href="/usluge" variant="secondary" size="lg">Sve usluge</Button>
       </div>
     </div>
   </section>
@@ -75,6 +75,63 @@ const homepage = await getHomepage();
           </div>
         </div>
       </div>
+
+      {
+        category.sections && category.sections.length > 0 && (
+          <div class="mt-16 space-y-14">
+            {category.sections.map((section, i) => (
+              <div class="grid items-start gap-8 border-t border-line pt-10 lg:grid-cols-[1.3fr_1fr] lg:gap-14" data-reveal>
+                <div class={i % 2 === 1 ? 'lg:order-2' : ''}>
+                  <h2 class="display text-(length:--text-display-md) text-ink">{section.title}</h2>
+                  {section.paragraphs?.map((p) => (
+                    <p class="mt-4 text-[1.02rem] leading-relaxed text-slate">{p}</p>
+                  ))}
+                  {section.bullets && section.bullets.length > 0 && (
+                    <ul class="mt-6 grid gap-2.5 sm:grid-cols-2">
+                      {section.bullets.map((bullet) => (
+                        <li class="flex items-baseline gap-2.5 text-[0.92rem] leading-snug text-ink">
+                          <span class="h-1.5 w-1.5 shrink-0 translate-y-[-1px] rounded-full bg-steel" aria-hidden="true" />
+                          {bullet}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                {section.image && (
+                  <div class={`relative aspect-[4/3] overflow-hidden bg-ink ${i % 2 === 1 ? 'lg:order-1' : ''}`} data-parallax>
+                    <img
+                      src={section.image.src}
+                      alt={section.image.alt}
+                      class="absolute inset-0 h-full w-full scale-110 object-cover"
+                      loading="lazy"
+                      width="800"
+                      height="600"
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      {
+        category.slug === 'ev-punionice' && (
+          <div class="mt-16 border-t border-line pt-10" data-reveal>
+            <div class="grid items-center gap-8 bg-ink p-8 md:grid-cols-[1fr_auto] md:p-12">
+              <div>
+                <h2 class="display text-(length:--text-display-md) text-white">Stekerr uređaji</h2>
+                <p class="mt-3 max-w-xl text-[1.02rem] leading-relaxed text-mist">
+                  Cijeli asortiman punionica - od kućnih zidnih do javnih DC brzih punionica.
+                </p>
+              </div>
+              <Button href={`/usluge/${category.slug}/uredaji`} variant="ghost-dark">
+                Pogledajte uređaje
+              </Button>
+            </div>
+          </div>
+        )
+      }
 
       {
         category.subservices.length > 0 && (

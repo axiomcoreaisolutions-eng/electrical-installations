@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /*
-  Design tokens — see docs/design-concept.md for reasoning.
+  Design tokens - see docs/design-concept.md for reasoning.
   "noć u strojarnici": blue-graphite darks, cool porcelain lights,
   logo red used only as a signal, IBM Plex Mono as the instrument voice.
 */
@@ -14,17 +14,27 @@
   --color-line-dark: #24364a;
   --color-slate: #54657a;
   --color-mist: #9fb0c2;
-  --color-signal: #e02d2d;
+  --color-signal: #d22525; /* AA: 5.3:1 with white text and on white/porcelain */
   --color-signal-deep: #b91c1c;
   --color-steel: #3e5c7a;
 
+  /* Hard-edge system (v3.1): the whole site draws with hairlines and squared
+     corners, like a technical sheet. Radius tokens zeroed globally; only
+     rounded-full survives for schematic node dots. */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+
   --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Bricolage Grotesque Variable', 'Archivo Variable', ui-sans-serif, sans-serif;
+  --font-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-  --text-display-xl: clamp(2.4rem, 1.2rem + 4.8vw, 4.6rem);
-  --text-display-lg: clamp(1.9rem, 1.1rem + 3vw, 3.1rem);
-  --text-display-md: clamp(1.5rem, 1.1rem + 1.6vw, 2.2rem);
+  --text-display-xl: clamp(2.6rem, 1rem + 6vw, 6.2rem);
+  --text-display-lg: clamp(2rem, 1.1rem + 3.4vw, 3.6rem);
+  --text-display-md: clamp(1.5rem, 1.1rem + 1.8vw, 2.4rem);
 }
 
 html {
@@ -67,21 +77,64 @@ body {
   text-transform: uppercase;
 }
 
+/* Display: Archivo Expanded heavy - industrial signage voice, wide and
+   confident, thematically tied to electrical/technical infrastructure. */
 .display {
   font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.04;
+  font-variation-settings: 'wght' 800, 'wdth' 115;
+  letter-spacing: -0.01em;
+  line-height: 0.96;
   text-wrap: balance;
 }
 
-/* Ambient ticker strip: duplicated track loops via GSAP; static under
-   reduced motion (content is decorative and aria-hidden). */
-.ticker-track {
+/* Catalog rows: hairline top rules, full-width rhythm */
+.catalog-row {
+  border-top: 1px solid var(--color-line);
+}
+
+/* Overlay header solidifies once scrolled off the hero */
+#site-header.is-solid {
+  background-color: var(--color-ink);
+  border-bottom-color: var(--color-line-dark);
+}
+
+/* Hide scrollbar on drag carousels (native scroll stays keyboard-accessible) */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hero atmosphere: restrained steel-blue aurora + film grain over the video,
+   so the dark hero reads as depth, not a flat plate. */
+.hero-aurora {
+  background:
+    radial-gradient(50% 55% at 22% 42%, color-mix(in srgb, var(--color-steel) 60%, transparent) 0%, transparent 68%),
+    radial-gradient(45% 50% at 82% 70%, color-mix(in srgb, var(--color-ink-3) 70%, transparent) 0%, transparent 70%);
+  filter: blur(50px);
+}
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+
+/* Marquee tracks (hero + footer): duplicated content, GSAP-driven loop */
+.marquee-track {
   will-change: transform;
 }
 
-/* Schematic divider: hairline with a node dot — the recurring motif */
+/* Giant background wordmark (footer) */
+.wordmark-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-mist) 22%, transparent);
+  font-variation-settings: 'wght' 800, 'wdth' 120;
+  letter-spacing: -0.02em;
+}
+
+/* Schematic divider: hairline with a node dot - the recurring motif */
 .schematic-rule {
   position: relative;
   height: 1px;

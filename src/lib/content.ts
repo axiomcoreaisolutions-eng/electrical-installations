@@ -1,8 +1,8 @@
 /**
  * Content layer: fetches from Sanity at build time and falls back to the
  * seeded defaults in src/content/defaults.ts whenever a document is
- * missing or Sanity is unreachable. The site therefore always builds —
- * with or without CMS content — and every Sanity field, once populated,
+ * missing or Sanity is unreachable. The site therefore always builds -
+ * with or without CMS content - and every Sanity field, once populated,
  * overrides its default counterpart.
  */
 import { createClient } from '@sanity/client';
@@ -27,7 +27,7 @@ async function fetchOrNull<T>(query: string, params: Record<string, unknown> = {
     const result = await client.fetch<T>(query, params);
     return result ?? null;
   } catch {
-    // Sanity unreachable or dataset empty/private — build proceeds on defaults.
+    // Sanity unreachable or dataset empty/private - build proceeds on defaults.
     return null;
   }
 }

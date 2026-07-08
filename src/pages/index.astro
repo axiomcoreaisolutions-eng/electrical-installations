@@ -2,92 +2,146 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import SectionHead from '../components/SectionHead.astro';
-import CategoryCard from '../components/CategoryCard.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import ContactForm from '../components/ContactForm.astro';
 import Button from '../components/Button.astro';
+import Carousel from '../components/Carousel.astro';
+import ProductCard from '../components/ProductCard.astro';
 import { getHomepage, getCategories, getContactPage, seo } from '../lib/content';
+import { introDuo, diagnosticsShowcase, products, productsPage } from '../content/defaults';
 
 const homepage = await getHomepage();
 const categories = await getCategories();
 const contact = await getContactPage();
-const featured = categories.filter((c) => c.featured);
-const rest = categories.filter((c) => !c.featured);
+const water = categories.find((c) => c.featured) ?? categories[0];
+const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
 ---
 
-<Base title={seo.homeTitle} description={seo.homeDescription}>
+<Base title={seo.homeTitle} description={seo.homeDescription} headerVariant="overlay">
   <Hero hero={homepage.hero} />
 
-  <!-- Ambient ticker: decorative system inventory strip -->
-  <div class="overflow-hidden bg-porcelain py-5" aria-hidden="true">
-    <div class="ticker-track flex w-max items-center gap-10 pl-5" data-ticker>
+  <!-- Intro duo: Pristup / Tvrtka -->
+  <section class="bg-porcelain" aria-label="Pristup i tvrtka">
+    <div class="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-2 md:gap-8 md:px-8 md:py-28">
       {
-        [0, 1].map(() =>
-          categories.map((cat) => (
-            <span class="flex items-center gap-10 font-mono text-[0.72rem] tracking-[0.16em] whitespace-nowrap text-slate uppercase">
-              {cat.title}
-              <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal"></span>
-            </span>
-          ))
-        )
+        [introDuo.left, introDuo.right].map((block) => (
+          <div data-reveal>
+            <h2 data-split class="display text-(length:--text-display-md) text-ink">
+              {block.title}
+            </h2>
+            <div class="schematic-rule mt-5" aria-hidden="true" />
+            <p class="mt-6 max-w-lg text-[1.05rem] leading-relaxed text-slate">{block.text}</p>
+            <a
+              href={block.href}
+              class="group mt-5 inline-flex items-center gap-2 text-[0.95rem] font-semibold text-ink hover:text-signal-deep"
+            >
+              {block.linkLabel}
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
+                <path d={arrow} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </div>
+        ))
       }
     </div>
-  </div>
+  </section>
 
-  <!-- 2 — Umbrella categories -->
-  <section class="bg-porcelain" aria-labelledby="usluge-naslov">
-    <div class="mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28">
+  <!-- Catalog 01-06: full-width numbered category rows -->
+  <section class="bg-white" aria-labelledby="katalog-naslov">
+    <div class="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
       <SectionHead
         eyebrow="Sustavi"
         headline={homepage.categoriesSection.headline}
         supporting={homepage.categoriesSection.supporting}
       />
-      <span id="usluge-naslov" class="sr-only">{homepage.categoriesSection.headline}</span>
-      <div class="mt-12 grid gap-4 sm:grid-cols-6">
-        {featured.map((cat) => <CategoryCard category={cat} class="sm:col-span-6" data-reveal-card />)}
+      <span id="katalog-naslov" class="sr-only">{homepage.categoriesSection.headline}</span>
+
+      <div class="mt-14">
         {
-          rest.map((cat, i) => (
-            <CategoryCard
-              category={cat}
-              class={`sm:col-span-3 ${i < 3 ? 'lg:col-span-2' : ''}`}
-              data-reveal-card
-            />
+          categories.map((cat, i) => (
+            <a
+              href={`/usluge/${cat.slug}`}
+              class="catalog-row group grid gap-6 py-8 transition-colors hover:bg-porcelain/60 lg:grid-cols-[3.5rem_1.2fr_1fr_minmax(200px,320px)] lg:items-center lg:gap-8 lg:py-10"
+              data-reveal
+            >
+              <span class="font-mono text-[0.85rem] font-medium tracking-[0.14em] text-signal">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="display text-(length:--text-display-md) text-ink">{cat.title}</h3>
+                <p class="mt-2 font-mono text-[0.75rem] leading-relaxed text-slate/80 md:max-w-md">{cat.hint}</p>
+              </div>
+              <div>
+                <p class="text-[0.98rem] leading-relaxed text-slate">{cat.shortDescription}</p>
+                <span class="mt-3 inline-flex items-center gap-2 text-[0.92rem] font-semibold text-ink">
+                  {cat.ctaLabel}
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
+                    <path d={arrow} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+              <div class="relative hidden aspect-[4/3] overflow-hidden rounded-xl bg-ink lg:block" data-image-reveal>
+                <img
+                  src={cat.image}
+                  alt={cat.imageAlt}
+                  class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  width="640"
+                  height="480"
+                />
+              </div>
+            </a>
           ))
         }
+        <div class="catalog-row"></div>
       </div>
     </div>
   </section>
 
-  <!-- 3 — Why this matters -->
-  <section class="bg-ink" aria-labelledby="zasto-naslov">
-    <div class="mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28">
-      <SectionHead
-        eyebrow="Zašto je važno"
-        headline={homepage.whySection.headline}
-        supporting={homepage.whySection.supporting}
-        dark
-      />
-      <span id="zasto-naslov" class="sr-only">{homepage.whySection.headline}</span>
-      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- Diagnostic showcase D.01-D.05 (case-studies slot) -->
+  <section class="bg-ink" aria-labelledby="dijagnostika-naslov">
+    <div class="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div class="max-w-2xl" data-reveal>
+          <p class="eyebrow flex items-center gap-3 text-mist">
+            <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true"></span>
+            Vodovod i kanalizacija
+          </p>
+          <h2 data-split id="dijagnostika-naslov" class="display mt-4 text-(length:--text-display-lg) text-white">
+            {diagnosticsShowcase.headline}
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-mist">{diagnosticsShowcase.supporting}</p>
+        </div>
+        <Button href={`/usluge/${water.slug}`} variant="ghost-dark" class="shrink-0" data-reveal>
+          Cijela kategorija
+        </Button>
+      </div>
+
+      <Carousel label="Dijagnostičke usluge" slideClass="w-[82vw] sm:w-[340px]" dark class="mt-12">
         {
-          homepage.whySection.consequences.map((item) => (
-            <div class="rounded-xl border border-line-dark bg-ink-2 p-6" data-reveal-card>
-              <h3 class="text-lg font-semibold text-white">{item.title}</h3>
-              <p class="mt-2 text-[0.95rem] leading-relaxed text-mist">{item.text}</p>
-            </div>
+          water.subservices.map((sub) => (
+            <a
+              href={`/usluge/${water.slug}/${sub.slug}`}
+              class="group flex h-full flex-col border border-line-dark bg-ink-2 p-6 transition-colors hover:border-mist/50 md:p-7"
+            >
+              <h3 class="text-xl leading-snug font-semibold text-white">{sub.title}</h3>
+              <p class="mt-2.5 text-[0.95rem] leading-relaxed text-mist">{sub.shortDescription}</p>
+              <span class="mt-auto inline-flex items-center gap-2 pt-6 text-[0.92rem] font-semibold text-white">
+                Saznajte više
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
+                  <path d={arrow} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
           ))
         }
-      </div>
-      <div class="schematic-rule schematic-rule--dark mt-12" aria-hidden="true"></div>
-      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-white" data-reveal>
-        {homepage.whySection.closing}
-      </p>
+      </Carousel>
     </div>
   </section>
 
-  <!-- 4 — Process -->
-  <section class="bg-white" aria-labelledby="proces-naslov">
-    <div class="mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28">
+  <!-- Process strip -->
+  <section class="bg-porcelain" aria-labelledby="proces-naslov">
+    <div class="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
       <SectionHead eyebrow="Proces" headline={homepage.processSection.headline} />
       <span id="proces-naslov" class="sr-only">{homepage.processSection.headline}</span>
       <div class="relative mt-12 h-px bg-line" aria-hidden="true">
@@ -96,7 +150,7 @@ const rest = categories.filter((c) => !c.featured);
       <ol class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {
           homepage.processSection.steps.map((step, i) => (
-            <li class="relative rounded-xl border border-line bg-porcelain p-6" data-reveal-card>
+            <li class="rounded-xl border border-line bg-white p-6" data-reveal-card>
               <p class="font-mono text-[0.8rem] font-medium tracking-[0.14em] text-signal">
                 {String(i + 1).padStart(2, '0')}
               </p>
@@ -109,64 +163,62 @@ const rest = categories.filter((c) => !c.featured);
     </div>
   </section>
 
-  <!-- 5 — Featured category deep dive -->
-  <section class="bg-porcelain" aria-labelledby="vodovod-naslov">
-    <div class="mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28">
-      <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+  <!-- Statement: why it matters -->
+  <section class="bg-white" aria-labelledby="zasto-naslov">
+    <div class="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
+      <div class="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
         <div data-reveal>
-          <p class="eyebrow flex items-center gap-3 text-slate">
-            <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true"></span>
-            Vodovod i kanalizacija
-          </p>
-          <h2 id="vodovod-naslov" class="display mt-4 text-(length:--text-display-lg) text-ink">
-            {homepage.deepDiveSection.headline}
+          <h2 data-split id="zasto-naslov" class="display max-w-3xl text-(length:--text-display-lg) text-ink">
+            {homepage.whySection.headline}
           </h2>
-          <p class="mt-5 text-lg leading-relaxed text-slate">{homepage.deepDiveSection.supporting}</p>
-          <ul class="mt-7 grid gap-2.5 sm:grid-cols-2">
-            {
-              homepage.deepDiveSection.problems.map((problem) => (
-                <li class="flex items-baseline gap-2.5 text-[0.95rem] leading-snug text-ink">
-                  <span class="h-1.5 w-1.5 shrink-0 translate-y-[-1px] rounded-full bg-steel" aria-hidden="true" />
-                  {problem}
-                </li>
-              ))
-            }
-          </ul>
-          <p class="mt-7 max-w-xl text-[0.98rem] leading-relaxed text-slate">
-            {homepage.deepDiveSection.closing}
-          </p>
-          <Button href={homepage.deepDiveSection.ctaHref} class="mt-8">
-            {homepage.deepDiveSection.ctaLabel}
-          </Button>
+          <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate">{homepage.whySection.supporting}</p>
+          <p class="mt-6 max-w-2xl text-[1.02rem] leading-relaxed text-ink">{homepage.whySection.closing}</p>
         </div>
-        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-ink" data-reveal data-parallax>
-          <img
-            src="/images/vodovod.jpg"
-            alt="Cijevi i ventili u strojarnici vodovodnog sustava"
-            class="absolute inset-0 h-full w-full scale-110 object-cover opacity-90"
-            loading="lazy"
-            width="1200"
-            height="900"
-          />
-          <p
-            class="absolute bottom-0 left-0 m-4 rounded-md bg-ink/70 px-3 py-1.5 font-mono text-[0.7rem] tracking-[0.14em] text-mist backdrop-blur-sm"
-          >
-            DETEKCIJA — VODOVODNI SUSTAVI
-          </p>
-        </div>
+        <ul class="grid content-start gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-1" data-reveal>
+          {
+            homepage.whySection.consequences.map((item) => (
+              <li class="border-b border-line pb-4">
+                <h3 class="text-[1.02rem] font-semibold text-ink">{item.title}</h3>
+                <p class="mt-1 text-[0.9rem] leading-relaxed text-slate">{item.text}</p>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- 6 — Trust / way of working -->
-  <section class="bg-white" aria-labelledby="povjerenje-naslov">
-    <div class="mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28">
+  <!-- Value trio: way of working with imagery -->
+  <section class="bg-porcelain" aria-labelledby="povjerenje-naslov">
+    <div class="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
       <SectionHead eyebrow="Način rada" headline={homepage.trustSection.headline} />
       <span id="povjerenje-naslov" class="sr-only">{homepage.trustSection.headline}</span>
-      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-12 grid gap-4 md:grid-cols-3">
         {
-          homepage.trustSection.cards.map((card) => (
-            <div class="rounded-xl border border-line bg-porcelain p-6" data-reveal-card>
+          homepage.trustSection.cards.slice(0, 3).map((card, i) => (
+            <div class="overflow-hidden rounded-2xl border border-line bg-white" data-reveal-card>
+              <div class="relative aspect-[3/2] overflow-hidden bg-ink">
+                <img
+                  src={['/images/vodovod.jpg', '/images/tim.jpg', '/images/elektro.jpg'][i]}
+                  alt=""
+                  class="absolute inset-0 h-full w-full object-cover"
+                  loading="lazy"
+                  width="640"
+                  height="427"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg font-semibold text-ink">{card.title}</h3>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-slate">{card.text}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        {
+          homepage.trustSection.cards.slice(3).map((card) => (
+            <div class="rounded-2xl border border-line bg-white p-6" data-reveal-card>
               <div class="h-px w-8 bg-signal" aria-hidden="true" />
               <h3 class="mt-4 text-lg font-semibold text-ink">{card.title}</h3>
               <p class="mt-2 text-[0.95rem] leading-relaxed text-slate">{card.text}</p>
@@ -177,57 +229,42 @@ const rest = categories.filter((c) => !c.featured);
     </div>
   </section>
 
-  <!-- 7 — About -->
-  <section class="bg-porcelain" aria-labelledby="onama-naslov">
-    <div class="mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28">
-      <div class="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16" data-reveal>
-        <div>
-          <p class="eyebrow flex items-center gap-3 text-slate">
+  <!-- Products: Stekerr EV charger showcase (image-bg cards + carousel) -->
+  <section class="bg-ink" aria-labelledby="uredaji-naslov">
+    <div class="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
+      <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
+        <div class="max-w-2xl">
+          <p class="eyebrow flex items-center gap-3 text-mist">
             <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true"></span>
-            O nama
+            Uređaji
           </p>
-          <h2 id="onama-naslov" class="display mt-4 text-(length:--text-display-lg) text-ink">
-            {homepage.aboutSection.headline}
+          <h2 data-split id="uredaji-naslov" class="display mt-4 text-(length:--text-display-lg) text-white">
+            Stekerr punionice električnih vozila
           </h2>
+          <p class="mt-5 text-lg leading-relaxed text-mist">{productsPage.intro}</p>
         </div>
-        <div>
-          {
-            homepage.aboutSection.paragraphs.map((p) => (
-              <p class="mt-4 text-[1.02rem] leading-relaxed text-slate first:mt-1">{p}</p>
-            ))
-          }
-          <a
-            href="/o-nama"
-            class="mt-6 inline-flex items-center gap-2 text-[0.95rem] font-semibold text-ink hover:text-signal-deep"
-          >
-            Više o tvrtki
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-              <path
-                d="M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"></path>
-            </svg>
-          </a>
-        </div>
+        <Button href="/usluge/ev-punionice/uredaji" variant="ghost-dark" class="shrink-0">Svi uređaji</Button>
       </div>
+
+      <Carousel label="Stekerr uređaji" slideClass="w-[74vw] sm:w-[300px]" dark class="mt-12">
+        {products.map((product) => <ProductCard product={product} />)}
+      </Carousel>
     </div>
   </section>
 
-  <!-- 8 — Contact CTA -->
+  <!-- Contact CTA -->
   <CtaBanner content={homepage.contactCta} />
 
-  <!-- 9 — Contact form -->
+  <!-- Contact form -->
   <section class="bg-white" aria-labelledby="upit-naslov">
-    <div class="mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28">
+    <div class="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
       <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
         <div data-reveal>
           <p class="eyebrow flex items-center gap-3 text-slate">
             <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true"></span>
             Kontakt
           </p>
-          <h2 id="upit-naslov" class="display mt-4 text-(length:--text-display-lg) text-ink">
+          <h2 data-split id="upit-naslov" class="display mt-4 text-(length:--text-display-lg) text-ink">
             {contact.formTitle}
           </h2>
           <p class="mt-5 text-lg leading-relaxed text-slate">{contact.supporting}</p>

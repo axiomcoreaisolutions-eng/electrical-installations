@@ -290,6 +290,20 @@ const trustCard = defineType({
   orderings: [{ title: 'Po redoslijedu', name: 'order', by: [{ field: 'order', direction: 'asc' }] }],
 });
 
+const product = defineType({
+  name: 'product',
+  title: 'Proizvod (EV punionice)',
+  type: 'document',
+  fields: [
+    defineField({ name: 'name', title: 'Naziv', type: 'string', validation: (r) => r.required() }),
+    defineField({ name: 'description', title: 'Opis', type: 'text', rows: 3 }),
+    defineField({ name: 'image', title: 'Fotografija', type: 'image' }),
+    defineField({ name: 'badge', title: 'Oznaka (npr. "Novo")', type: 'string' }),
+    defineField({ name: 'order', title: 'Redoslijed', type: 'number' }),
+  ],
+  orderings: [{ title: 'Po redoslijedu', name: 'order', by: [{ field: 'order', direction: 'asc' }] }],
+});
+
 const contactPage = defineType({
   name: 'contactPage',
   title: 'Kontakt stranica',
@@ -317,5 +331,6 @@ export const schemaTypes = [
   subservice,
   processStep,
   trustCard,
+  product,
   contactPage,
 ];

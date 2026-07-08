@@ -26,20 +26,20 @@ const siblings = category.subservices.filter((s) => s.slug !== subservice.slug);
 ---
 
 <Base title={subservice.seoTitle} description={subservice.seoDescription}>
-  <section class="bg-ink">
-    <div class="mx-auto max-w-[1200px] px-5 pt-16 pb-14 md:px-8 md:pt-24 md:pb-20">
-      <nav aria-label="Putanja" class="font-mono text-[0.75rem] tracking-[0.08em] text-mist">
-        <a href="/usluge" class="transition-colors hover:text-white">Usluge</a>
+  <section class="border-b border-line bg-porcelain">
+    <div class="mx-auto max-w-[1400px] px-5 pt-12 pb-14 md:px-8 md:pt-16 md:pb-20">
+      <nav aria-label="Putanja" class="border-b border-line pb-4 font-mono text-[0.75rem] tracking-[0.08em] text-slate uppercase">
+        <a href="/usluge" class="transition-colors hover:text-ink">Usluge</a>
         <span aria-hidden="true"> / </span>
         <a
           href={`/usluge/${category.slug}`}
-          class="inline-block max-w-[16rem] truncate align-bottom transition-colors hover:text-white sm:max-w-none"
+          class="inline-block max-w-[16rem] truncate align-bottom transition-colors hover:text-ink sm:max-w-none"
         >
           {category.title}
         </a>
       </nav>
-      <h1 class="display mt-6 max-w-3xl text-(length:--text-display-xl) text-white">{subservice.title}</h1>
-      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-mist">{subservice.shortDescription}</p>
+      <h1 data-split class="display mt-8 max-w-4xl text-(length:--text-display-xl) text-ink">{subservice.title}</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate">{subservice.shortDescription}</p>
       <div class="mt-9">
         <Button href="/kontakt" size="lg">Pošaljite upit</Button>
       </div>
@@ -55,7 +55,64 @@ const siblings = category.subservices.filter((s) => s.slug !== subservice.slug);
               <p class="mt-5 text-[1.05rem] leading-relaxed text-ink first:mt-0">{p}</p>
             ))
           }
-          <p class="mt-8 rounded-xl border border-line bg-white p-5 text-[0.95rem] leading-relaxed text-slate">
+
+          {
+            subservice.bullets && subservice.bullets.length > 0 && (
+              <>
+                <h2 class="mt-10 text-xl font-semibold text-ink">Što obuhvaća</h2>
+                <ul class="mt-5 grid gap-2.5 sm:grid-cols-2">
+                  {subservice.bullets.map((bullet) => (
+                    <li class="flex items-baseline gap-2.5 text-[0.95rem] leading-snug text-ink">
+                      <span class="h-1.5 w-1.5 shrink-0 translate-y-[-1px] rounded-full bg-steel" aria-hidden="true" />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )
+          }
+
+          {
+            subservice.steps && subservice.steps.length > 0 && (
+              <>
+                <h2 class="mt-10 text-xl font-semibold text-ink">Kako izgleda proces</h2>
+                <ol class="mt-5 space-y-0">
+                  {subservice.steps.map((step, i) => (
+                    <li class="grid grid-cols-[3rem_1fr] gap-4 border-t border-line py-5">
+                      <span class="font-mono text-[0.85rem] font-medium tracking-[0.14em] text-signal">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <div>
+                        <h3 class="text-[1.05rem] leading-snug font-semibold text-ink">{step.title}</h3>
+                        {step.text && <p class="mt-1.5 text-[0.95rem] leading-relaxed text-slate">{step.text}</p>}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </>
+            )
+          }
+
+          {
+            subservice.images && subservice.images.length > 0 && (
+              <div class="mt-10 grid gap-4 sm:grid-cols-2">
+                {subservice.images.map((img) => (
+                  <div class="relative aspect-[4/3] overflow-hidden bg-ink" data-parallax>
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      class="absolute inset-0 h-full w-full scale-110 object-cover"
+                      loading="lazy"
+                      width="800"
+                      height="600"
+                    />
+                  </div>
+                ))}
+              </div>
+            )
+          }
+
+          <p class="mt-8 border border-line bg-white p-5 text-[0.95rem] leading-relaxed text-slate">
             Dio kategorije:{' '}
             <a href={`/usluge/${category.slug}`} class="font-semibold text-ink underline decoration-line underline-offset-2 hover:decoration-ink">
               {category.title}

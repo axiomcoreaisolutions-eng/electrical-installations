@@ -1,0 +1,47 @@
+---
+/**
+ * Vector recreation of the company mark (diamond + bolt) for interactive use.
+ * The diamond is a compound path (evenodd) so the bolt is a true cutout;
+ * a signal-red bolt slides into the cutout on hover, clipped by the diamond.
+ */
+interface Props {
+  class?: string;
+  interactive?: boolean;
+}
+
+const { class: className, interactive = true } = Astro.props;
+const diamond =
+  'M50 1 L99 59 L50 117 L1 59 Z M57 15 L38 63 L48 63 L42 103 L63 53 L52 53 L61 15 Z';
+const bolt = 'M57 15 L38 63 L48 63 L42 103 L63 53 L52 53 L61 15 Z';
+---
+
+<span class:list={['logo-mark inline-block', interactive && 'logo-mark--interactive', className]} aria-hidden="true">
+  <svg viewBox="0 0 100 118" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto">
+    <defs>
+      <clipPath id="mark-clip">
+        <path d="M50 1 L99 59 L50 117 L1 59 Z"></path>
+      </clipPath>
+    </defs>
+    <path d={diamond} fill="currentColor" fill-rule="evenodd"></path>
+    <g clip-path="url(#mark-clip)">
+      <path d={bolt} fill="var(--color-signal)" class="logo-mark__bolt"></path>
+    </g>
+  </svg>
+</span>
+
+<style>
+  .logo-mark__bolt {
+    transform: translateY(110%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .logo-mark--interactive:hover .logo-mark__bolt,
+  a:hover .logo-mark--interactive .logo-mark__bolt,
+  a:focus-visible .logo-mark--interactive .logo-mark__bolt {
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .logo-mark__bolt {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,110 @@
+---
+/**
+ * Accessible drag/scroll carousel. Native scroll-snap keeps it keyboard- and
+ * screen-reader-friendly (no JS required to read it); the script adds
+ * prev/next buttons and pointer drag-to-scroll on top.
+ */
+interface Props {
+  label: string;
+  /** Tailwind width classes applied to each direct child slide. */
+  slideClass?: string;
+  /** Dark controls for dark-background sections. */
+  dark?: boolean;
+  class?: string;
+}
+
+const { label, slideClass = 'w-[78vw] sm:w-[360px]', dark = false, class: className } = Astro.props;
+const ctrl = dark
+  ? 'border-white/25 text-white hover:border-white/70 disabled:hover:border-white/25'
+  : 'border-line text-ink hover:border-ink disabled:hover:border-line';
+---
+
+<div class:list={['relative', className]} data-carousel>
+  <div class="mb-6 flex items-center justify-end gap-2">
+    <button
+      type="button"
+      data-carousel-prev
+      aria-label="Prethodni"
+      class:list={['flex h-11 w-11 items-center justify-center border transition-colors disabled:opacity-35', ctrl]}
+    >
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      data-carousel-next
+      aria-label="Sljedeći"
+      class:list={['flex h-11 w-11 items-center justify-center border transition-colors disabled:opacity-35', ctrl]}
+    >
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  </div>
+
+  <div
+    data-carousel-track
+    role="region"
+    aria-label={label}
+    tabindex="0"
+    class="scrollbar-none flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-1"
+  >
+    <div class="contents" data-slide-class={slideClass}>
+      <slot />
+    </div>
+  </div>
+</div>
+
+<script>
+  const SLIDE_WIDTH_CLASS_ATTR = 'data-slide-class';
+
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-carousel-track]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-carousel-next]');
+    if (!track) return;
+
+    // Apply per-slide width classes to the real slides (flattened from the
+    // `contents` wrapper) and give them snap alignment.
+    const wrapper = track.querySelector<HTMLElement>(`[${SLIDE_WIDTH_CLASS_ATTR}]`);
+    const widthClasses = wrapper?.getAttribute(SLIDE_WIDTH_CLASS_ATTR)?.split(' ') ?? [];
+    const slides = Array.from(wrapper?.children ?? []) as HTMLElement[];
+    slides.forEach((slide) => {
+      slide.classList.add('shrink-0', 'snap-start', ...widthClasses);
+    });
+
+    const step = () => (slides[0]?.getBoundingClientRect().width ?? 320) + 16;
+
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= max;
+    };
+
+    prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', update, { passive: true });
+    update();
+
+    // Pointer drag-to-scroll (desktop). Native touch scroll already works.
+    let down = false;
+    let startX = 0;
+    let startScroll = 0;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      down = true;
+      startX = e.clientX;
+      startScroll = track.scrollLeft;
+      track.classList.add('cursor-grabbing');
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      track.scrollLeft = startScroll - (e.clientX - startX);
+    });
+    window.addEventListener('pointerup', () => {
+      down = false;
+      track.classList.remove('cursor-grabbing');
+    });
+  });
+</script>

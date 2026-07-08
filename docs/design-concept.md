@@ -1,5 +1,40 @@
 # Design Concept — Electrical Installations d.o.o.
 
+## v3.1 — Hard-edge correction (2026-07-08)
+
+A screenshot study of the reference (not just its markup) forced a system
+correction: the reference's identity is a **flat brand-color field** with
+**zero border-radius** and visible hairline grid rules — not a dark photo
+hero with rounded panels. Changes: all radius tokens zeroed globally
+(only `rounded-full` node dots survive); homepage hero rebuilt as a
+signal-red field with the black diamond-bolt mark as the hero graphic,
+hairline label rows, and black/bordered squared CTAs; the video moved
+below the field as a full-bleed band; header went light (porcelain,
+hairline rule, squared black CTA); interior page heroes converted from
+ink to porcelain ground. Display type tightened (weight 650, -0.03em,
+lh 0.98). Red-as-field is the one sanctioned exception to "signal, never
+a surface" — the hero only.
+
+## v3 — Facelift (Enerblock-informed, 2026-07-08)
+
+Structural reference: enerblock.net/en (structure, motion vocabulary, and
+technical-document vernacular only — all code, copy, and assets are ours).
+Palette and type stay ours; the reference's orange-accent slot maps to our
+signal red.
+
+**Adopted patterns:** Lenis smooth scroll (desktop, motion-OK only);
+SplitText character reveals on display headings; numbered full-width
+catalog sections (01–06 — a real catalog sequence, like the reference's
+solutions list); a coded diagnostic showcase (D.01–D.05) in the
+case-studies slot using only real subservice content; cursor-coordinate
+readout on the hero media (instrument vernacular); footer reorganized into
+numbered blocks (SEK.01–03). Glassmorphism retired per design rules —
+solid surfaces and composition carry the hero now.
+
+**Type scale (v3):** hero display up to ~6.5rem via clamp; Bricolage
+Grotesque 600 remains the display voice, Archivo body, IBM Plex Mono
+instrument labels. Everything below reads through these tokens.
+
 *Defined before build, 2026-07-08. Every visual decision in the codebase derives
 from this document.*
 
@@ -19,7 +54,7 @@ decorative that a facility engineer would find embarrassing.
 | `porcelain` | `#F3F5F7` | light section backgrounds | Deliberately **cool** off-white (not warm cream) — reads as technical paper / blueprint stock, and keeps continuity with the cold-light hero. |
 | `line` | `#DFE5EB` | hairlines, card borders | Schematic-drawing weight, never heavy borders. |
 | `slate` | `#54657A` | secondary text | Cold grey-blue, matches the system. |
-| `signal` | `#E02D2D` | primary CTA, active states, index of priority category | The logo red, used the way red is used on an instrument panel: as a **signal**, never as a surface. If red appears, it means "act here." |
+| `signal` | `#D22525` (v3; was `#E02D2D`) | primary CTA, active states, catalog indexes | The logo red, darkened one step in v3 so white button text and red-on-white labels pass WCAG AA (~5.3:1). Used the way red is used on an instrument panel: as a **signal**, never as a surface. |
 | `steel` | `#3E5C7A` | diagram lines, subtle water-adjacent accents | Whisper of blue for schematic motifs; never competes with signal red. |
 
 Section rhythm alternates dark → light deliberately: hero (dark) → categories

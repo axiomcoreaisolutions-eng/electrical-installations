@@ -11,16 +11,16 @@ const settings = await getSiteSettings();
   title="O nama | Electrical Installations d.o.o."
   description="Electrical Installations d.o.o., osnovan 2023., partner je za tehničke sustave objekata: vodovod i detekciju kvarova, elektroinstalacije, solar, klimatizaciju, parking i EV punionice."
 >
-  <section class="bg-ink">
-    <div class="mx-auto max-w-[1200px] px-5 pt-16 pb-14 md:px-8 md:pt-24 md:pb-20">
-      <p class="eyebrow flex items-center gap-3 text-mist">
+  <section class="border-b border-line bg-porcelain">
+    <div class="mx-auto max-w-[1400px] px-5 pt-12 pb-14 md:px-8 md:pt-16 md:pb-20">
+      <p class="eyebrow flex items-center gap-3 border-b border-line pb-4 text-slate">
         <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true"></span>
         O nama
       </p>
-      <h1 class="display mt-5 max-w-3xl text-(length:--text-display-xl) text-white">
+      <h1 data-split class="display mt-8 max-w-4xl text-(length:--text-display-xl) text-ink">
         {homepage.aboutSection.headline}
       </h1>
-      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-mist">
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate">
         {settings.positioningLine} Jedan partner za više ključnih sustava objekta.
       </p>
     </div>
@@ -52,8 +52,8 @@ const settings = await getSiteSettings();
         <div class="space-y-4" data-reveal>
           <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-ink" data-parallax>
             <img
-              src="/images/tim.jpg"
-              alt="Tehničar provjerava razvodni ormar mjernim instrumentom"
+              src="/images/legacy/o-nama.jpg"
+              alt="Službeno vozilo tvrtke Electrical Installations"
               class="absolute inset-0 h-full w-full scale-110 object-cover"
               loading="lazy"
               width="1200"

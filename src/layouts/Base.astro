@@ -1,6 +1,5 @@
 ---
-import '@fontsource-variable/archivo';
-import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/archivo/standard.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
@@ -11,9 +10,11 @@ import { getSiteSettings } from '../lib/content';
 interface Props {
   title: string;
   description: string;
+  /** 'overlay' floats the header transparent over the dark hero (homepage). */
+  headerVariant?: 'default' | 'overlay';
 }
 
-const { title, description } = Astro.props;
+const { title, description, headerVariant = 'default' } = Astro.props;
 const settings = await getSiteSettings();
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
@@ -67,7 +68,7 @@ const jsonLd = {
     >
       Preskoči na sadržaj
     </a>
-    <Header />
+    <Header variant={headerVariant} />
     <main id="glavni-sadrzaj">
       <slot />
     </main>

@@ -1,0 +1,46 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Button from '../../../components/Button.astro';
+import CtaBanner from '../../../components/CtaBanner.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import { getCategories, getHomepage } from '../../../lib/content';
+import { products, productsPage } from '../../../content/defaults';
+
+const categories = await getCategories();
+const ev = categories.find((c) => c.slug === 'ev-punionice');
+const homepage = await getHomepage();
+---
+
+<Base title={productsPage.seoTitle} description={productsPage.seoDescription}>
+  <section class="border-b border-line bg-porcelain">
+    <div class="mx-auto max-w-[1400px] px-5 pt-12 pb-14 md:px-8 md:pt-16 md:pb-20">
+      <nav
+        aria-label="Putanja"
+        class="border-b border-line pb-4 font-mono text-[0.75rem] tracking-[0.08em] text-slate uppercase"
+      >
+        <a href="/usluge" class="transition-colors hover:text-ink">Usluge</a>
+        <span aria-hidden="true"> / </span>
+        <a href="/usluge/ev-punionice" class="transition-colors hover:text-ink">
+          {ev?.title ?? 'EV punionice'}
+        </a>
+      </nav>
+      <h1 data-split class="display mt-8 max-w-4xl text-(length:--text-display-xl) text-ink">
+        {productsPage.title}
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate">{productsPage.intro}</p>
+      <div class="mt-9">
+        <Button href="/kontakt" size="lg">Zatražite ponudu</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-ink">
+    <div class="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-24">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((product) => <ProductCard product={product} data-reveal-card />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner content={homepage.contactCta} />
+</Base>
