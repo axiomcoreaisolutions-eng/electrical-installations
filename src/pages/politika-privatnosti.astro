@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import { getSiteSettings } from '../lib/content';
+
+const settings = await getSiteSettings();
+---
+
+<Base
+  title="Politika privatnosti | Electrical Installations d.o.o."
+  description="Politika privatnosti web stranice Electrical Installations d.o.o. — kako prikupljamo i koristimo podatke iz kontaktnog obrasca."
+>
+  <section class="bg-porcelain">
+    <div class="mx-auto max-w-3xl px-5 py-16 md:px-8 md:py-24">
+      <h1 class="display text-(length:--text-display-lg) text-ink">Politika privatnosti</h1>
+
+      <div class="mt-8 space-y-6 text-[1.02rem] leading-relaxed text-ink">
+        <p>
+          {settings.companyName} ({settings.address}) poštuje vašu privatnost i osobne podatke
+          obrađuje u skladu s Općom uredbom o zaštiti podataka (GDPR).
+        </p>
+        <h2 class="text-xl font-semibold">Koje podatke prikupljamo</h2>
+        <p>
+          Putem kontaktnog obrasca prikupljamo podatke koje sami unesete: ime i prezime, telefon,
+          e-mail adresu, vrstu usluge, lokaciju objekta i sadržaj poruke.
+        </p>
+        <h2 class="text-xl font-semibold">U koju svrhu</h2>
+        <p>
+          Podaci se koriste isključivo za odgovor na vaš upit i pripremu ponude. Ne koriste se za
+          marketing i ne prosljeđuju se trećim stranama, osim pružatelju usluge hostinga obrasca.
+        </p>
+        <h2 class="text-xl font-semibold">Koliko dugo čuvamo podatke</h2>
+        <p>Podatke iz upita čuvamo onoliko dugo koliko je potrebno za obradu upita i poslovnu komunikaciju koja iz njega proizlazi.</p>
+        <h2 class="text-xl font-semibold">Kolačići</h2>
+        <p>
+          Stranica ne koristi kolačiće za praćenje niti alate za oglašavanje. Poslužitelj može
+          bilježiti standardne tehničke zapise (npr. IP adresu) isključivo radi sigurnosti i
+          ispravnog rada stranice.
+        </p>
+        <h2 class="text-xl font-semibold">Vaša prava</h2>
+        <p>
+          U svakom trenutku možete zatražiti uvid, ispravak ili brisanje svojih podataka, kao i
+          podnijeti prigovor nadzornom tijelu (AZOP). Pišite nam na
+          <a href={`mailto:${settings.email}`} class="underline decoration-line underline-offset-2 hover:decoration-ink">{settings.email}</a>
+          ili nazovite <a href={`tel:${settings.phoneHref}`} class="underline decoration-line underline-offset-2 hover:decoration-ink">{settings.phone}</a>.
+        </p>
+        <h2 class="text-xl font-semibold">Voditelj obrade</h2>
+        <p>{settings.companyName}, {settings.address}.</p>
+      </div>
+    </div>
+  </section>
+</Base>

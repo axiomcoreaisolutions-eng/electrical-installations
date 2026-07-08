@@ -1,0 +1,76 @@
+---
+import { getSiteSettings, getCategories } from '../lib/content';
+
+const settings = await getSiteSettings();
+const categories = await getCategories();
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-ink text-white">
+  <div class="mx-auto max-w-[1200px] px-5 py-14 md:px-8 md:py-20">
+    <div class="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr] md:gap-8">
+      <div>
+        <a href="/" class="flex items-center gap-3" aria-label="Electrical Installations d.o.o. — naslovnica">
+          <img src="/logo-mark.png" alt="" width="28" height="33" class="h-9 w-auto invert" loading="lazy" />
+          <span class="flex flex-col leading-none">
+            <span class="text-[0.85rem] font-bold tracking-[0.18em] text-signal">ELECTRICAL</span>
+            <span class="mt-0.5 text-[0.7rem] font-medium tracking-[0.30em] text-white/85">INSTALLATIONS</span>
+          </span>
+        </a>
+        <p class="mt-5 max-w-sm text-[0.95rem] leading-relaxed text-mist">
+          {settings.positioningLine} Jedan partner za vodovod, elektroinstalacije, solar, klimatizaciju,
+          parking sustave i EV punionice.
+        </p>
+        <address class="mt-6 space-y-1.5 font-mono text-[0.82rem] not-italic leading-relaxed text-mist">
+          <p>
+            <a href={`tel:${settings.phoneHref}`} class="transition-colors hover:text-white">{settings.phone}</a>
+          </p>
+          <p>
+            <a href={`mailto:${settings.email}`} class="transition-colors hover:text-white">{settings.email}</a>
+          </p>
+          <p>{settings.address}</p>
+        </address>
+      </div>
+
+      <nav aria-label="Usluge">
+        <p class="eyebrow text-white/60">Usluge</p>
+        <ul class="mt-4 space-y-2.5">
+          {
+            categories.map((cat) => (
+              <li>
+                <a
+                  href={`/usluge/${cat.slug}`}
+                  class="text-[0.92rem] leading-snug text-mist transition-colors hover:text-white"
+                >
+                  {cat.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav aria-label="Stranice">
+        <p class="eyebrow text-white/60">Stranice</p>
+        <ul class="mt-4 space-y-2.5">
+          <li><a href="/" class="text-[0.92rem] text-mist transition-colors hover:text-white">Naslovnica</a></li>
+          <li><a href="/usluge" class="text-[0.92rem] text-mist transition-colors hover:text-white">Usluge</a></li>
+          <li><a href="/o-nama" class="text-[0.92rem] text-mist transition-colors hover:text-white">O nama</a></li>
+          <li><a href="/kontakt" class="text-[0.92rem] text-mist transition-colors hover:text-white">Kontakt</a></li>
+          <li>
+            <a href="/politika-privatnosti" class="text-[0.92rem] text-mist transition-colors hover:text-white">
+              Politika privatnosti
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="schematic-rule schematic-rule--dark mt-14"></div>
+
+    <div class="mt-6 flex flex-col gap-2 text-[0.8rem] text-white/50 md:flex-row md:items-center md:justify-between">
+      <p>© {year} {settings.companyName} Sva prava pridržana.</p>
+      <p class="font-mono">Zagreb, Hrvatska</p>
+    </div>
+  </div>
+</footer>

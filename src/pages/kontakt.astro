@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { getContactPage, getSiteSettings, getCategories } from '../lib/content';
+
+const contact = await getContactPage();
+const settings = await getSiteSettings();
+const categories = await getCategories();
+---
+
+<Base
+  title="Kontakt | Electrical Installations d.o.o."
+  description="Pošaljite upit za vodovod i detekciju kvarova, elektroinstalacije, solarne sustave, klimatizaciju, parking sustave ili EV punionice. Zagreb — odgovaramo s jasnom procjenom."
+>
+  <section class="bg-ink">
+    <div class="mx-auto max-w-[1200px] px-5 pt-16 pb-14 md:px-8 md:pt-24 md:pb-20">
+      <p class="eyebrow flex items-center gap-3 text-mist">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true"></span>
+        Kontakt
+      </p>
+      <h1 class="display mt-5 max-w-3xl text-(length:--text-display-xl) text-white">{contact.headline}</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-mist">{contact.supporting}</p>
+    </div>
+  </section>
+
+  <section class="bg-porcelain">
+    <div class="mx-auto max-w-[1200px] px-5 py-16 md:px-8 md:py-24">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
+        <div data-reveal>
+          <div class="rounded-xl border border-line bg-white p-6">
+            <p class="eyebrow text-slate">Izravni kontakt</p>
+            <dl class="mt-4 space-y-4">
+              <div>
+                <dt class="font-mono text-[0.75rem] tracking-[0.08em] text-slate uppercase">Telefon</dt>
+                <dd class="mt-1">
+                  <a href={`tel:${settings.phoneHref}`} class="text-lg font-semibold text-ink hover:text-signal-deep">
+                    {settings.phone}
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt class="font-mono text-[0.75rem] tracking-[0.08em] text-slate uppercase">Email</dt>
+                <dd class="mt-1">
+                  <a href={`mailto:${settings.email}`} class="text-lg font-semibold text-ink hover:text-signal-deep">
+                    {settings.email}
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt class="font-mono text-[0.75rem] tracking-[0.08em] text-slate uppercase">Adresa</dt>
+                <dd class="mt-1 text-[1.02rem] leading-relaxed text-ink">{settings.address}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="mt-4 rounded-xl border border-line bg-white p-6">
+            <p class="eyebrow text-slate">Usluge</p>
+            <ul class="mt-4 space-y-2">
+              {
+                categories.map((cat) => (
+                  <li>
+                    <a
+                      href={`/usluge/${cat.slug}`}
+                      class="text-[0.92rem] leading-snug text-slate transition-colors hover:text-ink"
+                    >
+                      {cat.title}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <h2 class="display text-(length:--text-display-md) text-ink">{contact.formTitle}</h2>
+          <div class="mt-7">
+            <ContactForm content={contact} idPrefix="upit-kontakt" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

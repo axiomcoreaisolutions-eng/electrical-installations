@@ -1,0 +1,174 @@
+---
+import Button from './Button.astro';
+import type { heroContent } from '../content/defaults';
+
+interface Props {
+  hero: typeof heroContent;
+}
+
+const { hero } = Astro.props;
+---
+
+<section class="bg-porcelain px-3 pt-3 md:px-5 md:pt-5" aria-label="Uvod">
+  <div
+    id="hero-frame"
+    class="relative mx-auto max-w-[1536px] overflow-hidden rounded-[1.4rem] bg-ink md:rounded-[2.2rem]"
+  >
+    <!-- Media layer: poster always present; video source injected only on
+         desktop viewports without reduced-motion/data-saver (see script). -->
+    <div id="hero-media" class="absolute inset-0 will-change-transform" aria-hidden="true">
+      <img
+        id="hero-poster"
+        src="/media/hero-poster.jpg"
+        alt=""
+        class="absolute inset-0 h-full w-full object-cover"
+        fetchpriority="high"
+      />
+      <video
+        id="hero-video"
+        class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700"
+        muted
+        loop
+        playsinline
+        autoplay
+        preload="none"
+        poster="/media/hero-poster.jpg"
+        data-src="/media/hero.mp4"
+        tabindex="-1"
+      ></video>
+      <div class="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/40 to-ink/80"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-ink/60 via-transparent to-transparent"></div>
+    </div>
+
+    <div
+      id="hero-content"
+      class="relative mx-auto flex min-h-[calc(100svh-5.5rem)] max-w-[1200px] flex-col px-5 pt-14 md:min-h-[calc(100svh-6.5rem)] md:px-9 md:pt-20"
+    >
+      <div class="flex-1">
+        <p
+          data-hero-seq
+          class="eyebrow inline-block max-w-2xl rounded-full border border-white/15 bg-white/10 px-4 py-2 leading-relaxed text-white/90 backdrop-blur-md"
+        >
+          {hero.badge}
+        </p>
+        <h1 data-hero-seq class="display mt-7 max-w-3xl text-(length:--text-display-xl) text-white">
+          {hero.headline}
+        </h1>
+        <p data-hero-seq class="mt-6 max-w-2xl text-lg leading-relaxed text-mist md:text-xl">
+          {hero.subheadline}
+        </p>
+        <div data-hero-seq class="mt-9 flex flex-wrap gap-3">
+          <Button href={hero.primaryCta.href} size="lg">{hero.primaryCta.label}</Button>
+          <Button href={hero.secondaryCta.href} variant="ghost-dark" size="lg">
+            {hero.secondaryCta.label}
+          </Button>
+        </div>
+      </div>
+
+      <!-- Glass category card (bottom-left), clearing the corner cutout -->
+      <div class="mt-14 pb-24 sm:pb-28 md:pb-8 md:pr-80">
+        <a
+          data-hero-seq
+          href={hero.cardLeft.href}
+          class="group block max-w-md rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-xl transition-colors hover:border-white/40 hover:bg-white/15"
+        >
+          <p class="text-lg leading-snug font-semibold text-white">{hero.cardLeft.text}</p>
+          <p class="mt-2 font-mono text-[0.78rem] leading-relaxed text-white/70">{hero.cardLeft.hint}</p>
+          <span class="mt-4 inline-flex items-center gap-2 text-[0.9rem] font-semibold text-white">
+            Saznajte više
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 15 15"
+              fill="none"
+              aria-hidden="true"
+              class="transition-transform duration-200 group-hover:translate-x-0.5"
+            >
+              <path
+                d="M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Faux-cutout corner card: same surface as the page background, with
+         SVG inverse-radius masks so the frame appears carved around it. -->
+    <div
+      data-hero-seq
+      class="absolute right-0 bottom-0 flex items-center gap-3 rounded-tl-[1.5rem] bg-porcelain p-3 pt-4 pl-6 sm:gap-4 sm:p-4 sm:pt-5 sm:pl-8 md:rounded-tl-[2.5rem] md:p-5 md:pt-6 md:pl-10"
+    >
+      <div
+        class="pointer-events-none absolute -top-[1.5rem] right-0 h-[1.5rem] w-[1.5rem] md:-top-[2.5rem] md:h-[2.5rem] md:w-[2.5rem]"
+        aria-hidden="true"
+      >
+        <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" style="fill: var(--color-porcelain)"></path>
+        </svg>
+      </div>
+      <div
+        class="pointer-events-none absolute bottom-0 -left-[1.5rem] h-[1.5rem] w-[1.5rem] md:-left-[2.5rem] md:h-[2.5rem] md:w-[2.5rem]"
+        aria-hidden="true"
+      >
+        <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" style="fill: var(--color-porcelain)"></path>
+        </svg>
+      </div>
+
+      <div class="flex flex-col">
+        <p class="text-[0.95rem] leading-snug font-semibold text-ink md:text-[1.05rem]">
+          {hero.cardRight.title}
+        </p>
+        <a
+          href={hero.cardRight.href}
+          class="group mt-2 inline-flex items-center gap-2.5 self-start rounded-full bg-signal py-2 pr-4 pl-2 text-[0.88rem] font-semibold text-white transition-colors hover:bg-signal-deep"
+        >
+          <span class="flex items-center justify-center rounded-full bg-white/20 p-1">
+            <svg width="14" height="14" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+              <path
+                d="M3.5 11.5l8-8m0 0H5m6.5 0V10"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          {hero.cardRight.ctaLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Load the hero video only where it earns its bytes: desktop viewport,
+  // no reduced-motion preference, no data-saver. Everyone else keeps the
+  // poster image — same composition, zero video cost.
+  const video = document.getElementById('hero-video') as HTMLVideoElement | null;
+  const wantsMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+  const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+  const connection = (navigator as { connection?: { saveData?: boolean } }).connection;
+  const savesData = connection?.saveData === true;
+
+  if (video && wantsMotion && isDesktop && !savesData) {
+    const source = document.createElement('source');
+    source.src = video.dataset.src ?? '';
+    source.type = 'video/mp4';
+    video.append(source);
+    video.load();
+    video.addEventListener(
+      'playing',
+      () => {
+        video.classList.remove('opacity-0');
+      },
+      { once: true }
+    );
+    video.play().catch(() => {
+      /* autoplay blocked — poster remains */
+    });
+  }
+</script>

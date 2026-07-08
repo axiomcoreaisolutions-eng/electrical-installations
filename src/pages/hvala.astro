@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+
+<Base
+  title="Hvala na upitu | Electrical Installations d.o.o."
+  description="Vaš upit je zaprimljen. Javit ćemo vam se s procjenom i preporukom sljedećeg koraka."
+>
+  <meta slot="head" name="robots" content="noindex" />
+  <section class="bg-ink">
+    <div class="mx-auto flex min-h-[60svh] max-w-[1200px] flex-col items-start justify-center px-5 py-20 md:px-8">
+      <p class="eyebrow flex items-center gap-3 text-mist">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true"></span>
+        Upit zaprimljen
+      </p>
+      <h1 class="display mt-5 max-w-2xl text-(length:--text-display-xl) text-white">
+        Hvala. Vaš upit je zaprimljen.
+      </h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-mist">
+        Pregledat ćemo informacije i javiti vam se s procjenom i preporukom sljedećeg koraka.
+      </p>
+      <div class="mt-9 flex flex-wrap gap-3">
+        <Button href="/" size="lg">Natrag na naslovnicu</Button>
+        <Button href="/usluge" variant="ghost-dark" size="lg">Pogledajte usluge</Button>
+      </div>
+    </div>
+  </section>
+</Base>

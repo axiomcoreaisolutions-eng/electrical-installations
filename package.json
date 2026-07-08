@@ -1,0 +1,28 @@
+{
+  "name": "electrical-installations-site",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.4.1",
+    "@fontsource-variable/archivo": "^5.2.5",
+    "@fontsource-variable/bricolage-grotesque": "^5.2.10",
+    "@fontsource/ibm-plex-mono": "^5.2.5",
+    "@sanity/client": "^7.4.0",
+    "@tailwindcss/vite": "^4.1.10",
+    "astro": "^5.10.0",
+    "groq": "^4.1.0",
+    "gsap": "^3.13.0",
+    "tailwindcss": "^4.1.10"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,123 @@
+---
+import type { ServiceCategory } from '../content/defaults';
+
+interface Props {
+  category: ServiceCategory;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { category, class: className, ...rest } = Astro.props;
+const href = `/usluge/${category.slug}`;
+
+// One consistent stroke icon per category (lucide-style, 1.6px stroke).
+const icons: Record<string, string> = {
+  'vodovod-kanalizacija-i-detekcija-kvarova':
+    'M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z',
+  elektroinstalacije: 'M13 2 3 14h9l-1 8 10-12h-9l1-8z',
+  'solarni-sustavi':
+    'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41',
+  'klimatizacija-i-ventilacija':
+    'M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2M9.6 4.6A2 2 0 1 1 11 8H2M12.6 19.4A2 2 0 1 0 14 16H2',
+  'parking-sustavi': 'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM9 17V7h4a3 3 0 0 1 0 6H9',
+  'ev-punionice': 'M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8h12z',
+};
+const iconPath = icons[category.slug];
+---
+
+{
+  category.featured ? (
+    <a
+      href={href}
+      {...rest}
+      class:list={[
+        'group relative block overflow-hidden rounded-2xl bg-ink transition-transform duration-200 hover:-translate-y-0.5',
+        className,
+      ]}
+    >
+      <div class="grid md:grid-cols-[1.2fr_1fr]">
+        <div class="flex flex-col justify-between p-6 md:p-9">
+          <div>
+            <h3 class="display text-(length:--text-display-md) text-white">{category.title}</h3>
+            <p class="mt-3 max-w-xl text-base leading-relaxed text-mist">{category.shortDescription}</p>
+            <p class="mt-4 max-w-xl border-l-2 border-signal pl-3 font-mono text-[0.78rem] leading-relaxed text-mist">
+              {category.hint}
+            </p>
+          </div>
+          <span class="mt-7 inline-flex items-center gap-2 text-[0.95rem] font-semibold text-white">
+            {category.ctaLabel}
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 15 15"
+              fill="none"
+              aria-hidden="true"
+              class="transition-transform duration-200 group-hover:translate-x-0.5"
+            >
+              <path
+                d="M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+        </div>
+        <div class="relative min-h-56 overflow-hidden md:min-h-full">
+          <img
+            src={category.image}
+            alt={category.imageAlt}
+            class="absolute inset-0 h-full w-full scale-110 object-cover opacity-85 transition-transform duration-500 group-hover:scale-[1.14]"
+            loading="lazy"
+            width="800"
+            height="600"
+          />
+          <div class="absolute inset-0 bg-gradient-to-r from-ink via-ink/25 to-transparent" aria-hidden="true" />
+        </div>
+      </div>
+    </a>
+  ) : (
+    <a
+      href={href}
+      {...rest}
+      class:list={[
+        'group flex flex-col rounded-2xl border border-line bg-white p-6 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-ink md:p-7',
+        className,
+      ]}
+    >
+      {iconPath && (
+        <span
+          class="flex h-11 w-11 items-center justify-center rounded-xl bg-porcelain text-ink transition-colors group-hover:bg-ink group-hover:text-white"
+          aria-hidden="true"
+        >
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+            <path d={iconPath} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+      )}
+      <h3 class="mt-4 text-xl leading-snug font-semibold text-ink">{category.title}</h3>
+      <p class="mt-2.5 text-[0.95rem] leading-relaxed text-slate">{category.shortDescription}</p>
+      <p class="mt-3 font-mono text-[0.75rem] leading-relaxed text-slate/80">{category.hint}</p>
+      <span class="mt-auto inline-flex items-center gap-2 pt-5 text-[0.92rem] font-semibold text-ink">
+        {category.ctaLabel}
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 15 15"
+          fill="none"
+          aria-hidden="true"
+          class="transition-transform duration-200 group-hover:translate-x-0.5"
+        >
+          <path
+            d="M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+    </a>
+  )
+}

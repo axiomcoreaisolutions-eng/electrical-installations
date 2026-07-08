@@ -1,0 +1,106 @@
+@import 'tailwindcss';
+
+/*
+  Design tokens — see docs/design-concept.md for reasoning.
+  "noć u strojarnici": blue-graphite darks, cool porcelain lights,
+  logo red used only as a signal, IBM Plex Mono as the instrument voice.
+*/
+@theme {
+  --color-ink: #0b1420;
+  --color-ink-2: #12202f;
+  --color-ink-3: #1b2c3f;
+  --color-porcelain: #f3f5f7;
+  --color-line: #dfe5eb;
+  --color-line-dark: #24364a;
+  --color-slate: #54657a;
+  --color-mist: #9fb0c2;
+  --color-signal: #e02d2d;
+  --color-signal-deep: #b91c1c;
+  --color-steel: #3e5c7a;
+
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Archivo Variable', ui-sans-serif, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --text-display-xl: clamp(2.4rem, 1.2rem + 4.8vw, 4.6rem);
+  --text-display-lg: clamp(1.9rem, 1.1rem + 3vw, 3.1rem);
+  --text-display-md: clamp(1.5rem, 1.1rem + 1.6vw, 2.2rem);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-porcelain);
+  color: var(--color-ink);
+  font-variation-settings: 'wdth' 100;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: var(--color-ink);
+  color: var(--color-porcelain);
+}
+
+/* Visible, consistent keyboard focus everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Instrument-label voice: mono eyebrows and indexes */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+/* Ambient ticker strip: duplicated track loops via GSAP; static under
+   reduced motion (content is decorative and aria-hidden). */
+.ticker-track {
+  will-change: transform;
+}
+
+/* Schematic divider: hairline with a node dot — the recurring motif */
+.schematic-rule {
+  position: relative;
+  height: 1px;
+  background: var(--color-line);
+}
+.schematic-rule::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -2.5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-signal);
+}
+.schematic-rule--dark {
+  background: var(--color-line-dark);
+}
+
+/* Motion: elements animated by GSAP start visible; JS sets initial states
+   only when motion is allowed, so no-JS and reduced-motion users see
+   everything. Nothing is hidden in CSS. */

@@ -1,0 +1,89 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Button from '../../../components/Button.astro';
+import CtaBanner from '../../../components/CtaBanner.astro';
+import { getCategories, getHomepage } from '../../../lib/content';
+import type { ServiceCategory, Subservice } from '../../../content/defaults';
+
+export async function getStaticPaths() {
+  const categories = await getCategories();
+  return categories.flatMap((category) =>
+    category.subservices.map((subservice) => ({
+      params: { category: category.slug, slug: subservice.slug },
+      props: { category, subservice },
+    }))
+  );
+}
+
+interface Props {
+  category: ServiceCategory;
+  subservice: Subservice;
+}
+
+const { category, subservice } = Astro.props;
+const homepage = await getHomepage();
+const siblings = category.subservices.filter((s) => s.slug !== subservice.slug);
+---
+
+<Base title={subservice.seoTitle} description={subservice.seoDescription}>
+  <section class="bg-ink">
+    <div class="mx-auto max-w-[1200px] px-5 pt-16 pb-14 md:px-8 md:pt-24 md:pb-20">
+      <nav aria-label="Putanja" class="font-mono text-[0.75rem] tracking-[0.08em] text-mist">
+        <a href="/usluge" class="transition-colors hover:text-white">Usluge</a>
+        <span aria-hidden="true"> / </span>
+        <a
+          href={`/usluge/${category.slug}`}
+          class="inline-block max-w-[16rem] truncate align-bottom transition-colors hover:text-white sm:max-w-none"
+        >
+          {category.title}
+        </a>
+      </nav>
+      <h1 class="display mt-6 max-w-3xl text-(length:--text-display-xl) text-white">{subservice.title}</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-mist">{subservice.shortDescription}</p>
+      <div class="mt-9">
+        <Button href="/kontakt" size="lg">Pošaljite upit</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-porcelain">
+    <div class="mx-auto max-w-[1200px] px-5 py-16 md:px-8 md:py-24">
+      <div class="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
+        <div data-reveal>
+          {
+            subservice.longDescription.map((p) => (
+              <p class="mt-5 text-[1.05rem] leading-relaxed text-ink first:mt-0">{p}</p>
+            ))
+          }
+          <p class="mt-8 rounded-xl border border-line bg-white p-5 text-[0.95rem] leading-relaxed text-slate">
+            Dio kategorije:{' '}
+            <a href={`/usluge/${category.slug}`} class="font-semibold text-ink underline decoration-line underline-offset-2 hover:decoration-ink">
+              {category.title}
+            </a>
+          </p>
+        </div>
+        {
+          siblings.length > 0 && (
+            <aside data-reveal>
+              <p class="eyebrow text-slate">Povezane usluge</p>
+              <ul class="mt-4 space-y-2.5">
+                {siblings.map((s) => (
+                  <li>
+                    <a
+                      href={`/usluge/${category.slug}/${s.slug}`}
+                      class="block rounded-lg border border-line bg-white px-4 py-3 text-[0.95rem] font-medium text-ink transition-colors hover:border-ink"
+                    >
+                      {s.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner content={homepage.contactCta} />
+</Base>

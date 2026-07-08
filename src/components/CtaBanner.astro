@@ -1,0 +1,25 @@
+---
+import Button from './Button.astro';
+import type { contactCta } from '../content/defaults';
+
+interface Props {
+  content: typeof contactCta;
+}
+
+const { content } = Astro.props;
+---
+
+<section class="bg-ink" aria-label="Poziv na kontakt">
+  <div class="mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28" data-reveal>
+    <div class="max-w-3xl">
+      <h2 class="display text-(length:--text-display-lg) text-white">{content.headline}</h2>
+      <p class="mt-5 text-lg leading-relaxed text-mist">{content.supporting}</p>
+      <div class="mt-9 flex flex-wrap gap-3">
+        <Button href={content.primaryCta.href} size="lg">{content.primaryCta.label}</Button>
+        <Button href={content.secondaryCta.href} variant="ghost-dark" size="lg">
+          {content.secondaryCta.label}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>

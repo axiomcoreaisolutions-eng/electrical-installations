@@ -1,0 +1,122 @@
+---
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/Button.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import { getCategories, getHomepage } from '../../lib/content';
+import type { ServiceCategory } from '../../content/defaults';
+
+export async function getStaticPaths() {
+  const categories = await getCategories();
+  return categories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+interface Props {
+  category: ServiceCategory;
+}
+
+const { category } = Astro.props;
+const homepage = await getHomepage();
+---
+
+<Base title={category.seoTitle} description={category.seoDescription}>
+  <section class="bg-ink">
+    <div class="mx-auto max-w-[1200px] px-5 pt-16 pb-14 md:px-8 md:pt-24 md:pb-20">
+      <nav aria-label="Putanja" class="font-mono text-[0.75rem] tracking-[0.08em] text-mist">
+        <a href="/usluge" class="transition-colors hover:text-white">Usluge</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-white/80">Kategorija</span>
+      </nav>
+      <h1 class="display mt-6 max-w-3xl text-(length:--text-display-xl) text-white">{category.title}</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-mist">{category.shortDescription}</p>
+      <div class="mt-9 flex flex-wrap gap-3">
+        <Button href="/kontakt" size="lg">Pošaljite upit</Button>
+        <Button href="/usluge" variant="ghost-dark" size="lg">Sve usluge</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-porcelain">
+    <div class="mx-auto max-w-[1200px] px-5 py-16 md:px-8 md:py-24">
+      <div class="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
+        <div data-reveal>
+          {
+            category.intro.map((p) => (
+              <p class="mt-5 text-[1.05rem] leading-relaxed text-ink first:mt-0">{p}</p>
+            ))
+          }
+          <h2 class="mt-10 text-xl font-semibold text-ink">Što obuhvaća</h2>
+          <ul class="mt-5 grid gap-2.5 sm:grid-cols-2">
+            {
+              category.bullets.map((bullet) => (
+                <li class="flex items-baseline gap-2.5 text-[0.95rem] leading-snug text-ink">
+                  <span class="h-1.5 w-1.5 shrink-0 translate-y-[-1px] rounded-full bg-steel" aria-hidden="true" />
+                  {bullet}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div data-reveal>
+          <div
+            class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-ink lg:sticky lg:top-24"
+            data-parallax
+          >
+            <img
+              src={category.image}
+              alt={category.imageAlt}
+              class="absolute inset-0 h-full w-full scale-110 object-cover"
+              loading="lazy"
+              width="1200"
+              height="900"
+            />
+          </div>
+        </div>
+      </div>
+
+      {
+        category.subservices.length > 0 && (
+          <div class="mt-16">
+            <div class="schematic-rule" aria-hidden="true" />
+            <h2 class="display mt-10 text-(length:--text-display-md) text-ink">Usluge unutar kategorije</h2>
+            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {category.subservices.map((sub) => (
+                <a
+                  href={`/usluge/${category.slug}/${sub.slug}`}
+                  class="group flex flex-col rounded-xl border border-line bg-white p-6 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-ink"
+                  data-reveal-card
+                >
+                  <h3 class="text-lg leading-snug font-semibold text-ink">{sub.title}</h3>
+                  <p class="mt-2 text-[0.92rem] leading-relaxed text-slate">{sub.shortDescription}</p>
+                  <span class="mt-auto inline-flex items-center gap-2 pt-4 text-[0.9rem] font-semibold text-ink">
+                    Saznajte više
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 15 15"
+                      fill="none"
+                      aria-hidden="true"
+                      class="transition-transform duration-200 group-hover:translate-x-0.5"
+                    >
+                      <path
+                        d="M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <CtaBanner content={homepage.contactCta} />
+</Base>

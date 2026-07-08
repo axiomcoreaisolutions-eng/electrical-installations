@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import { getCategories, getHomepage } from '../../lib/content';
+
+const categories = await getCategories();
+const homepage = await getHomepage();
+---
+
+<Base
+  title="Usluge | Electrical Installations d.o.o."
+  description="Šest ključnih tehničkih sustava na jednom mjestu: vodovod i detekcija kvarova, elektroinstalacije, solarni sustavi, klimatizacija, parking sustavi i EV punionice."
+>
+  <section class="bg-porcelain">
+    <div class="mx-auto max-w-[1200px] px-5 py-16 md:px-8 md:py-24">
+      <SectionHead
+        eyebrow="Usluge"
+        headline="Ključni tehnički sustavi na jednom mjestu."
+        supporting={homepage.categoriesSection.supporting}
+      />
+      <div class="mt-12 grid gap-4 sm:grid-cols-6">
+        {categories.filter((c) => c.featured).map((cat) => <CategoryCard category={cat} class="sm:col-span-6" data-reveal-card />)}
+        {
+          categories
+            .filter((c) => !c.featured)
+            .map((cat, i) => (
+              <CategoryCard
+                category={cat}
+                class={`sm:col-span-3 ${i < 3 ? 'lg:col-span-2' : ''}`}
+                data-reveal-card
+              />
+            ))
+        }
+      </div>
+    </div>
+  </section>
+  <CtaBanner content={homepage.contactCta} />
+</Base>

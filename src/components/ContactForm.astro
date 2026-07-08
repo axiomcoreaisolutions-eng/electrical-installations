@@ -1,0 +1,128 @@
+---
+import type { contactPage } from '../content/defaults';
+
+interface Props {
+  content: typeof contactPage;
+  /** Distinct DOM id prefix when the form appears twice in one build. */
+  idPrefix?: string;
+}
+
+const { content, idPrefix = 'upit' } = Astro.props;
+const id = (name: string) => `${idPrefix}-${name}`;
+
+const inputClass =
+  'w-full rounded-lg border border-line bg-white px-4 py-3 text-base text-ink placeholder:text-slate/60 transition-colors focus:border-ink focus:outline-none user-invalid:border-signal';
+const labelClass = 'mb-1.5 block font-mono text-[0.78rem] font-medium tracking-[0.08em] text-slate uppercase';
+---
+
+<!-- Netlify Forms: detected at deploy time via data-netlify. On Cloudflare
+     Pages, swap the action for a form endpoint — see README. -->
+<form
+  name="upit"
+  method="POST"
+  action="/hvala"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  class="grid gap-5"
+>
+  <input type="hidden" name="form-name" value="upit" />
+  <p class="hidden">
+    <label>Ne popunjavajte ovo polje: <input name="bot-field" /></label>
+  </p>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for={id('ime')} class={labelClass}>Ime i prezime *</label>
+      <input
+        id={id('ime')}
+        name="ime-i-prezime"
+        type="text"
+        required
+        autocomplete="name"
+        class={inputClass}
+      />
+    </div>
+    <div>
+      <label for={id('telefon')} class={labelClass}>Telefon</label>
+      <input
+        id={id('telefon')}
+        name="telefon"
+        type="tel"
+        autocomplete="tel"
+        class={inputClass}
+      />
+    </div>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for={id('email')} class={labelClass}>Email *</label>
+      <input
+        id={id('email')}
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        class={inputClass}
+      />
+    </div>
+    <div>
+      <label for={id('usluga')} class={labelClass}>Vrsta usluge</label>
+      <select id={id('usluga')} name="vrsta-usluge" class={inputClass}>
+        {content.serviceOptions.map((option) => <option value={option}>{option}</option>)}
+      </select>
+    </div>
+  </div>
+
+  <div>
+    <label for={id('lokacija')} class={labelClass}>Lokacija objekta</label>
+    <input
+      id={id('lokacija')}
+      name="lokacija-objekta"
+      type="text"
+      autocomplete="address-level2"
+      placeholder="npr. Zagreb, Trešnjevka"
+      class={inputClass}
+    />
+  </div>
+
+  <div>
+    <label for={id('poruka')} class={labelClass}>Poruka *</label>
+    <textarea
+      id={id('poruka')}
+      name="poruka"
+      required
+      rows="5"
+      placeholder="Opišite kvar, projekt ili pitanje…"
+      class={inputClass}></textarea>
+  </div>
+
+  <div class="flex items-start gap-3">
+    <input
+      id={id('gdpr')}
+      name="gdpr-privola"
+      type="checkbox"
+      required
+      value="da"
+      class="mt-1 h-4.5 w-4.5 shrink-0 accent-signal"
+    />
+    <label for={id('gdpr')} class="text-[0.88rem] leading-relaxed text-slate">
+      Slažem se da se moji podaci koriste za odgovor na ovaj upit. *
+    </label>
+  </div>
+
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <button
+      type="submit"
+      class="inline-flex items-center justify-center gap-2 rounded-lg bg-signal px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-signal-deep"
+    >
+      Pošaljite upit
+    </button>
+    <p class="text-[0.8rem] leading-relaxed text-slate">
+      {content.privacyNote.split('politici privatnosti')[0]}
+      <a href="/politika-privatnosti" class="underline decoration-line underline-offset-2 hover:text-ink">
+        politici privatnosti</a
+      >.
+    </p>
+  </div>
+</form>

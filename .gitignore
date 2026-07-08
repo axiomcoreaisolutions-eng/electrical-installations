@@ -1,0 +1,25 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# environment — never commit real secrets
+.env
+.env.*
+!.env.example
+
+# sanity
+studio/dist/
+studio/.sanity/
+
+# os / editor
+.DS_Store
+Thumbs.db
+
+# claude code local settings
+.claude/settings.local.json
+
+# raw source media (compressed copies live in public/media/)
+Slow_cinematic_dolly_shot_movi_Kling_30__54074.mp4

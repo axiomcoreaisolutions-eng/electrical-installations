@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+
+<Base
+  title="Stranica nije pronađena | Electrical Installations d.o.o."
+  description="Tražena stranica ne postoji. Vratite se na naslovnicu ili pogledajte usluge."
+>
+  <section class="bg-ink">
+    <div class="mx-auto flex min-h-[60svh] max-w-[1200px] flex-col items-start justify-center px-5 py-20 md:px-8">
+      <p class="font-mono text-[0.8rem] tracking-[0.14em] text-signal">GREŠKA 404</p>
+      <h1 class="display mt-5 max-w-2xl text-(length:--text-display-xl) text-white">
+        Stranica nije pronađena.
+      </h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-mist">
+        Tražena stranica ne postoji ili je premještena. Pravi smjer najbrže ćete pronaći kroz usluge.
+      </p>
+      <div class="mt-9 flex flex-wrap gap-3">
+        <Button href="/usluge" size="lg">Pogledajte usluge</Button>
+        <Button href="/" variant="ghost-dark" size="lg">Naslovnica</Button>
+      </div>
+    </div>
+  </section>
+</Base>

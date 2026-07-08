@@ -1,0 +1,33 @@
+---
+interface Props {
+  eyebrow: string;
+  headline: string;
+  supporting?: string;
+  dark?: boolean;
+  class?: string;
+}
+
+const { eyebrow, headline, supporting, dark = false, class: className } = Astro.props;
+---
+
+<div class:list={['max-w-3xl', className]} data-reveal>
+  <p class:list={['eyebrow flex items-center gap-3', dark ? 'text-mist' : 'text-slate']}>
+    <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true"></span>
+    {eyebrow}
+  </p>
+  <h2
+    class:list={[
+      'display mt-4 text-(length:--text-display-lg)',
+      dark ? 'text-white' : 'text-ink',
+    ]}
+  >
+    {headline}
+  </h2>
+  {
+    supporting && (
+      <p class:list={['mt-5 max-w-2xl text-lg leading-relaxed', dark ? 'text-mist' : 'text-slate']}>
+        {supporting}
+      </p>
+    )
+  }
+</div>
