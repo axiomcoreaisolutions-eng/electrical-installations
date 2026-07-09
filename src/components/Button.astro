@@ -9,8 +9,12 @@ interface Props {
 
 const { href, variant = 'primary', size = 'md', class: className, ...rest } = Astro.props;
 
+// Capture the label so we can render it twice for the hover text-swap
+// without changing any call site (they still pass plain text as children).
+const labelHtml = await Astro.slots.render('default');
+
 const base =
-  'group inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors';
+  'btn group inline-flex items-center justify-center gap-2 font-semibold transition-colors';
 const sizes = {
   md: 'px-5 py-2.5 text-[0.95rem]',
   lg: 'px-6 py-3.5 text-base',
@@ -23,7 +27,12 @@ const variants = {
 ---
 
 <a href={href} {...rest} class:list={[base, sizes[size], variants[variant], className]}>
-  <slot />
+  <span class="btn-swap">
+    <span class="btn-swap_inner">
+      <span set:html={labelHtml} />
+      <span aria-hidden="true" set:html={labelHtml} />
+    </span>
+  </span>
   <svg
     width="15"
     height="15"

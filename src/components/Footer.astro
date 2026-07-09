@@ -1,73 +1,16 @@
 ---
 import LogoMark from './LogoMark.astro';
-import { getSiteSettings, getCategories, getContactPage } from '../lib/content';
+import { getSiteSettings, getCategories } from '../lib/content';
 
 const settings = await getSiteSettings();
 const categories = await getCategories();
-const contact = await getContactPage();
 const year = new Date().getFullYear();
-const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
 ---
 
-<footer class="relative overflow-hidden bg-ink text-white">
-  <!-- Ambient background: hairline grid + steel wash + giant wordmark -->
-  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-    <div
-      class="absolute inset-0 opacity-[0.5]"
-      style="background:radial-gradient(60% 80% at 15% 0%, color-mix(in srgb, var(--color-steel) 30%, transparent), transparent 60%);"
-    >
-    </div>
-    <div
-      class="absolute inset-0 opacity-[0.6]"
-      style="background-image:linear-gradient(to right, color-mix(in srgb, var(--color-mist) 6%, transparent) 1px, transparent 1px),linear-gradient(to bottom, color-mix(in srgb, var(--color-mist) 6%, transparent) 1px, transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom, black, transparent 75%);"
-    >
-    </div>
-  </div>
-
-  <!-- Service marquee -->
-  <div class="relative overflow-hidden border-b border-line-dark py-4" aria-hidden="true">
-    <div class="marquee-track flex w-max items-center gap-8" data-marquee>
-      {
-        [0, 1].map(() =>
-          categories.map((cat) => (
-            <span class="flex items-center gap-8 font-mono text-[0.72rem] tracking-[0.16em] whitespace-nowrap text-mist uppercase">
-              {cat.title}
-              <span class="inline-block h-1 w-1 rounded-full bg-signal" />
-            </span>
-          ))
-        )
-      }
-    </div>
-  </div>
-
-  <div class="relative mx-auto max-w-[1400px] px-5 md:px-8">
-    <!-- Big CTA -->
-    <div class="grid gap-8 border-b border-line-dark py-16 md:grid-cols-[1.3fr_1fr] md:items-end md:py-24">
-      <h2 class="display max-w-3xl text-(length:--text-display-lg) text-white">
-        {contact.headline ?? 'Imate kvar, projekt ili tehničko pitanje?'}
-      </h2>
-      <div class="flex flex-wrap gap-3 md:justify-end">
-        <a
-          href="/kontakt"
-          data-magnetic
-          class="group inline-flex items-center gap-2.5 bg-signal px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-signal-deep"
-        >
-          Kontaktirajte nas
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
-            <path d={arrow} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </a>
-        <a
-          href={`tel:${settings.phoneHref}`}
-          class="inline-flex items-center gap-2.5 border border-white/30 px-6 py-3.5 text-base font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/5"
-        >
-          {settings.phone}
-        </a>
-      </div>
-    </div>
-
-    <!-- Nav columns -->
-    <div class="grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:gap-8">
+<footer class="bg-ink text-white">
+  <div class="mx-auto max-w-[1400px] px-5 md:px-8">
+    <!-- Lead: brand statement + prominent contact -->
+    <div class="grid gap-12 border-b border-line-dark py-16 md:grid-cols-[1.2fr_1fr] md:items-end md:py-24">
       <div>
         <a href="/" class="flex items-center gap-3 text-white" aria-label="Electrical Installations d.o.o. - naslovnica">
           <LogoMark class="h-9" />
@@ -76,24 +19,34 @@ const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
             <span class="mt-0.5 text-[0.7rem] font-medium tracking-[0.30em] text-white/85">INSTALLATIONS</span>
           </span>
         </a>
-        <p class="mt-5 max-w-sm text-[0.95rem] leading-relaxed text-mist">
-          {settings.positioningLine} Jedan partner za vodovod, elektroinstalacije, solar, klimatizaciju,
-          parking sustave i EV punionice.
+        <p class="mt-6 max-w-md text-lg leading-relaxed text-mist">
+          {settings.positioningLine} Jedan partner za više ključnih sustava objekta.
         </p>
-        <address class="mt-6 space-y-1.5 font-mono text-[0.82rem] not-italic leading-relaxed text-mist">
-          <p>
-            <a href={`tel:${settings.phoneHref}`} class="transition-colors hover:text-white">{settings.phone}</a>
-          </p>
-          <p>
-            <a href={`mailto:${settings.email}`} class="transition-colors hover:text-white">{settings.email}</a>
-          </p>
-          <p>{settings.address}</p>
-        </address>
       </div>
 
+      <div class="md:justify-self-end md:text-right">
+        <p class="eyebrow-chip is-dark">
+          <span class="eyebrow-chip_dot" aria-hidden="true"></span>
+          Kontakt
+        </p>
+        <a
+          href={`tel:${settings.phoneHref}`}
+          class="mt-4 block text-2xl font-semibold text-white transition-colors hover:text-mist"
+        >
+          {settings.phone}
+        </a>
+        <a href={`mailto:${settings.email}`} class="mt-1 block text-lg text-mist transition-colors hover:text-white">
+          {settings.email}
+        </a>
+        <p class="mt-3 font-mono text-[0.8rem] leading-relaxed text-white/55">{settings.address}</p>
+      </div>
+    </div>
+
+    <!-- Nav columns -->
+    <div class="grid gap-10 py-14 sm:grid-cols-3">
       <nav aria-label="Usluge">
-        <p class="eyebrow text-white/60">Usluge</p>
-        <ul class="mt-4 space-y-2.5">
+        <p class="eyebrow text-white/50">Usluge</p>
+        <ul class="mt-5 space-y-2.5">
           {
             categories.map((cat) => (
               <li>
@@ -107,12 +60,18 @@ const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
       </nav>
 
       <nav aria-label="Stranice">
-        <p class="eyebrow text-white/60">Stranice</p>
-        <ul class="mt-4 space-y-2.5">
+        <p class="eyebrow text-white/50">Stranice</p>
+        <ul class="mt-5 space-y-2.5">
           <li><a href="/" class="text-[0.92rem] text-mist transition-colors hover:text-white">Naslovnica</a></li>
           <li><a href="/usluge" class="text-[0.92rem] text-mist transition-colors hover:text-white">Usluge</a></li>
           <li><a href="/o-nama" class="text-[0.92rem] text-mist transition-colors hover:text-white">O nama</a></li>
           <li><a href="/kontakt" class="text-[0.92rem] text-mist transition-colors hover:text-white">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Pravno">
+        <p class="eyebrow text-white/50">Pravno</p>
+        <ul class="mt-5 space-y-2.5">
           <li>
             <a href="/politika-privatnosti" class="text-[0.92rem] text-mist transition-colors hover:text-white">
               Politika privatnosti
@@ -122,13 +81,10 @@ const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
       </nav>
     </div>
 
-    <!-- Giant background wordmark -->
-    <div class="relative -mb-2 select-none md:-mb-4" aria-hidden="true">
-      <span class="wordmark-outline block text-[16vw] leading-[0.8] font-bold whitespace-nowrap">ELECTRICAL</span>
-    </div>
-
     <!-- Bottom bar -->
-    <div class="flex flex-col gap-3 border-t border-line-dark py-6 text-[0.8rem] text-white/50 md:flex-row md:items-center md:justify-between">
+    <div
+      class="flex flex-col gap-3 border-t border-line-dark py-6 text-[0.8rem] text-white/50 md:flex-row md:items-center md:justify-between"
+    >
       <p>© {year} {settings.companyName} Sva prava pridržana.</p>
       <div class="flex items-center gap-5">
         <p class="font-mono">Zagreb, Hrvatska</p>
@@ -150,6 +106,8 @@ const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
 <script>
   document.querySelector('[data-scroll-top]')?.addEventListener('click', () => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    const lenis = (window as unknown as { lenis?: { scrollTo: (t: number, o?: object) => void } }).lenis;
+    if (lenis) lenis.scrollTo(0, { immediate: reduce });
+    else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
   });
 </script>

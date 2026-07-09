@@ -110,6 +110,68 @@ export const backingSection = {
   href: '/usluge/ev-punionice',
 };
 
+/** Homepage feature-row copy: one line + a 3-item spec strip per category
+ *  (BEC case-card style). Values are real facts only, never fabricated. */
+export const homeFeatures: Record<string, { line: string; specs: { k: string; v: string }[] }> = {
+  'vodovod-kanalizacija-i-detekcija-kvarova': {
+    line: 'Dijagnostika prije zahvata - točan nalaz umjesto nagađanja.',
+    specs: [
+      { k: 'Usluge', v: '5' },
+      { k: 'Fokus', v: 'Detekcija kvarova' },
+      { k: 'Sjedište', v: 'Zagreb' },
+    ],
+  },
+  elektroinstalacije: {
+    line: 'Jaka i slaba struja, izvedena pregledno i sigurno.',
+    specs: [
+      { k: 'Struja', v: 'Jaka i slaba' },
+      { k: 'Opseg', v: '9 usluga' },
+      { k: 'Sjedište', v: 'Zagreb' },
+    ],
+  },
+  'solarni-sustavi': {
+    line: 'Solarni sustavi uz nadzor i održavanje 24/7.',
+    specs: [
+      { k: 'Nadzor', v: '24/7' },
+      { k: 'Sustav', v: 'ON / OFF-GRID' },
+      { k: 'Sjedište', v: 'Zagreb' },
+    ],
+  },
+  'klimatizacija-i-ventilacija': {
+    line: 'Klimatizacija i ventilacija prilagođena prostoru.',
+    specs: [
+      { k: 'Fokus', v: 'Klima i ventilacija' },
+      { k: 'Primjena', v: 'Stan i poslovni' },
+      { k: 'Sjedište', v: 'Zagreb' },
+    ],
+  },
+  'parking-sustavi': {
+    line: 'Rampe, naplata i softver usklađen s fiskalizacijom.',
+    specs: [
+      { k: 'Partner', v: 'Orbility' },
+      { k: 'Softver', v: 'Fiskalizacija' },
+      { k: 'Sjedište', v: 'Zagreb' },
+    ],
+  },
+  'ev-punionice': {
+    line: 'Stekerr punionice, izvedba po principu ključ u ruke.',
+    specs: [
+      { k: 'Brend', v: 'Stekerr' },
+      { k: 'Izvedba', v: 'Ključ u ruke' },
+      { k: 'Sjedište', v: 'Zagreb' },
+    ],
+  },
+};
+
+export const homeStatement = {
+  eyebrow: 'Tko smo',
+  text: 'Tehnički partner za sustave koji ne smiju stati - vodovod i detekcija kvarova, elektroinstalacije, solarni sustavi, klimatizacija, parking sustavi i EV punionice, na jednom mjestu.',
+  paragraph:
+    'Electrical Installations d.o.o. osnovan je 2023. godine i specijaliziran za širok spektar tehničkih sustava. Objektima nudimo ono što je u praksi najteže naći - jednog partnera s jednom odgovornošću za više ključnih sustava.',
+  linkLabel: 'O nama',
+  href: '/o-nama',
+};
+
 export const categoriesSection = {
   headline: 'Ključni tehnički sustavi na jednom mjestu.',
   supporting:

@@ -41,7 +41,7 @@ mm.add(
       (window as unknown as { lenis?: Lenis }).lenis = lenis;
     }
 
-    // --- Display headings: character rise, masked by lines ---
+    // --- Display headings: character rise, masked by lines (hero + page H1s) ---
     const splits: SplitText[] = [];
     document.querySelectorAll<HTMLElement>('[data-split]').forEach((el) => {
       const split = SplitText.create(el, { type: 'lines,chars', mask: 'lines' });
@@ -52,6 +52,21 @@ mm.add(
         ease: 'power3.out',
         stagger: { each: 0.016, from: 'start' },
         scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      });
+    });
+
+    // --- Section headings: word-by-word illumination on scroll (BEC-style).
+    //     Calmer and more editorial than a character stagger; words rise from
+    //     dim to full as the heading passes through the upper viewport. ---
+    document.querySelectorAll<HTMLElement>('[data-reveal-words]').forEach((el) => {
+      const split = SplitText.create(el, { type: 'words' });
+      splits.push(split);
+      gsap.set(split.words, { opacity: 0.22 });
+      gsap.to(split.words, {
+        opacity: 1,
+        ease: 'none',
+        stagger: 0.12,
+        scrollTrigger: { trigger: el, start: 'top 82%', end: 'top 42%', scrub: true },
       });
     });
 
@@ -111,6 +126,101 @@ mm.add(
         });
       });
     }
+
+    // --- Schematic cross-grid (contact CTA band = interactive, footer = static) ---
+    if (desktop) {
+      const NS = 'http://www.w3.org/2000/svg';
+      const cols = 20;
+      const rows = 8;
+      const spacing = 44;
+      const arm = 5;
+      const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+      document.querySelectorAll<HTMLElement>('[data-cross-grid]').forEach((grid) => {
+        const svg = document.createElementNS(NS, 'svg');
+        svg.setAttribute('width', '100%');
+        svg.setAttribute('height', '100%');
+        svg.setAttribute('viewBox', `0 0 ${cols * spacing} ${rows * spacing}`);
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+        grid.appendChild(svg);
+
+        const crosses: { scale: SVGGElement; cx: number; cy: number }[] = [];
+        for (let x = 0; x < cols; x++) {
+          for (let y = 0; y < rows; y++) {
+            const cx = x * spacing + spacing / 2;
+            const cy = y * spacing + spacing / 2;
+            const outer = document.createElementNS(NS, 'g');
+            outer.setAttribute('transform', `translate(${cx},${cy})`);
+            const scale = document.createElementNS(NS, 'g');
+            scale.setAttribute('class', 'cross-scale');
+            const l1 = document.createElementNS(NS, 'line');
+            l1.setAttribute('x1', String(-arm)); l1.setAttribute('y1', '0'); l1.setAttribute('x2', String(arm)); l1.setAttribute('y2', '0'); l1.setAttribute('class', 'cross-line');
+            const l2 = document.createElementNS(NS, 'line');
+            l2.setAttribute('x1', '0'); l2.setAttribute('y1', String(-arm)); l2.setAttribute('x2', '0'); l2.setAttribute('y2', String(arm)); l2.setAttribute('class', 'cross-line');
+            scale.append(l1, l2);
+            outer.append(scale);
+            svg.append(outer);
+            crosses.push({ scale, cx, cy });
+          }
+        }
+
+        // Cursor spotlight only where flagged. JS sets target scale/opacity;
+        // CSS transitions smooth it. rAF-throttled against pointer floods.
+        if (grid.hasAttribute('data-cross-interactive') && finePointer) {
+          const maxR = 180;
+          const maxScale = 2.4;
+          let queued = false;
+          let mx = -9999;
+          let my = -9999;
+          const paint = () => {
+            queued = false;
+            const rect = svg.getBoundingClientRect();
+            const px = ((mx - rect.left) / rect.width) * (cols * spacing);
+            const py = ((my - rect.top) / rect.height) * (rows * spacing);
+            for (const c of crosses) {
+              const d = Math.hypot(px - c.cx, py - c.cy);
+              if (d < maxR) {
+                const f = Math.pow(1 - d / maxR, 0.7);
+                c.scale.style.transform = `scale(${1 + f * (maxScale - 1)})`;
+                c.scale.style.opacity = String(0.14 + f * 0.8);
+              } else {
+                c.scale.style.transform = '';
+                c.scale.style.opacity = '';
+              }
+            }
+          };
+          const section = grid.closest('section') ?? grid;
+          section.addEventListener('pointermove', (e) => {
+            mx = (e as PointerEvent).clientX;
+            my = (e as PointerEvent).clientY;
+            if (!queued) {
+              queued = true;
+              requestAnimationFrame(paint);
+            }
+          });
+          section.addEventListener('pointerleave', () => {
+            for (const c of crosses) {
+              c.scale.style.transform = '';
+              c.scale.style.opacity = '';
+            }
+          });
+        }
+      });
+    }
+
+    // --- Mosaic image reveal (BEC-style): tiles cover the image, then
+    //     dissolve away in a random stagger as the frame enters view. ---
+    document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach((grid) => {
+      const tiles = grid.children;
+      gsap.set(tiles, { autoAlpha: 1 });
+      gsap.to(tiles, {
+        autoAlpha: 0,
+        duration: 0.5,
+        ease: 'power1.out',
+        stagger: { each: 0.018, from: 'random', grid: 'auto' },
+        scrollTrigger: { trigger: grid, start: 'top 82%', once: true },
+      });
+    });
 
     // --- Image frames: clip reveal from bottom as they enter ---
     gsap.utils.toArray<HTMLElement>('[data-image-reveal]').forEach((frame) => {

@@ -74,16 +74,16 @@ const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
           data-magnetic
           class="group inline-flex items-center gap-2.5 bg-signal px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-signal-deep"
         >
-          {hero.primaryCta.label}
+          <span class="btn-swap"><span class="btn-swap_inner"><span>{hero.primaryCta.label}</span><span aria-hidden="true">{hero.primaryCta.label}</span></span></span>
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
             <path d={arrow} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </a>
         <a
           href={hero.secondaryCta.href}
-          class="inline-flex items-center gap-2.5 border border-white/30 px-6 py-3.5 text-base font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/5"
+          class="group inline-flex items-center gap-2.5 border border-white/30 px-6 py-3.5 text-base font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/5"
         >
-          {hero.secondaryCta.label}
+          <span class="btn-swap"><span class="btn-swap_inner"><span>{hero.secondaryCta.label}</span><span aria-hidden="true">{hero.secondaryCta.label}</span></span></span>
         </a>
       </div>
     </div>

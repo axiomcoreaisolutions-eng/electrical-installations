@@ -98,6 +98,81 @@ body {
   border-bottom-color: var(--color-line-dark);
 }
 
+/* Eyebrow chip (BEC-style refined section label): mono uppercase on a faint
+   surface, with a small square signal dot. */
+.eyebrow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-slate);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+.eyebrow-chip.is-dark {
+  color: var(--color-mist);
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+}
+.eyebrow-chip_dot {
+  width: 5px;
+  height: 5px;
+  background: var(--color-signal);
+}
+
+/* Card hover line-fill: a hairline that draws across on hover (BEC .line-inner-hover) */
+.line-fill {
+  position: relative;
+  height: 1px;
+  background: var(--color-line);
+  overflow: hidden;
+}
+.line-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0 100% 0 0;
+  background: var(--color-signal);
+  transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .line-fill::after {
+  right: 0;
+}
+.line-fill.is-dark {
+  background: var(--color-line-dark);
+}
+.line-fill.is-bare {
+  background: transparent;
+}
+
+/* CTA text-swap: label rolls up to an identical copy on hover (BEC cta-text-wrapper).
+   The container is locked to a single line-box so overflow hides the second copy;
+   1.4em leaves room for Croatian diacritics (č ž š) and descenders. */
+.btn-swap {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.4em;
+}
+.btn-swap_inner {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-swap_inner > span {
+  display: block;
+  line-height: 1.4;
+}
+.group:hover .btn-swap_inner {
+  transform: translateY(-50%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-swap_inner {
+    transition: none;
+  }
+}
+
 /* Hide scrollbar on drag carousels (native scroll stays keyboard-accessible) */
 .scrollbar-none {
   scrollbar-width: none;
@@ -124,6 +199,102 @@ body {
 /* Marquee tracks (hero + footer): duplicated content, GSAP-driven loop */
 .marquee-track {
   will-change: transform;
+}
+
+/* Mosaic reveal tiles start hidden so the image is visible with no JS /
+   reduced motion; motion.ts makes them cover, then dissolves them. */
+[data-mosaic] > span {
+  opacity: 0;
+}
+
+/* Interactive schematic cross-grid (contact CTA band). Base state faint;
+   each cross scales + brightens toward the cursor via CSS transitions
+   (JS only sets target scale/opacity, so it stays cheap). */
+.cross-line {
+  stroke: var(--color-mist);
+  stroke-width: 1.25;
+}
+.cross-scale {
+  opacity: 0.14;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cross-scale {
+    transition: none;
+  }
+}
+
+/* Page-load preloader: ink overlay with the mark + a progress bar, lifts on
+   ready. Skipped entirely under reduced motion. */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  background: var(--color-ink);
+  opacity: 0;
+  visibility: hidden;
+}
+html.is-loading {
+  overflow: hidden;
+}
+html.is-loading .preloader {
+  opacity: 1;
+  visibility: visible;
+}
+.preloader_inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.preloader_word {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+}
+.preloader_bar {
+  display: block;
+  width: 120px;
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, #ffffff 14%, transparent);
+}
+.preloader_bar > span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--color-signal);
+}
+html.is-loading .preloader_bar > span {
+  animation: preload-bar 2s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+}
+@keyframes preload-bar {
+  to {
+    width: 100%;
+  }
+}
+.preloader.is-done {
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  transition:
+    clip-path 0.8s cubic-bezier(0.7, 0, 0.2, 1),
+    opacity 0.35s ease 0.5s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .preloader {
+    display: none;
+  }
 }
 
 /* Giant background wordmark (footer) */

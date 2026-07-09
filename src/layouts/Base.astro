@@ -5,6 +5,7 @@ import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import LogoMark from '../components/LogoMark.astro';
 import { getSiteSettings } from '../lib/content';
 
 interface Props {
@@ -60,8 +61,30 @@ const jsonLd = {
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <slot name="head" />
+    <!-- Preloader gate: set before paint so content never flashes first.
+         Skipped entirely under reduced-motion; a failsafe unlocks after 2.6s
+         so a stalled load can never trap the page. -->
+    <script is:inline>
+      (function () {
+        try {
+          if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('is-loading');
+            setTimeout(function () {
+              document.documentElement.classList.remove('is-loading');
+            }, 2600);
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="bg-porcelain text-ink antialiased">
+    <div id="preloader" class="preloader" aria-hidden="true">
+      <div class="preloader_inner text-white">
+        <LogoMark class="preloader_mark h-11" interactive={false} />
+        <span class="preloader_word">Electrical Installations</span>
+      </div>
+      <span class="preloader_bar"><span></span></span>
+    </div>
     <a
       href="#glavni-sadrzaj"
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-white"
@@ -74,5 +97,19 @@ const jsonLd = {
     </main>
     <Footer />
     <script src="../scripts/motion.ts"></script>
+    <script>
+      // Reveal: lift the preloader once the page is ready. Guarded so it only
+      // runs when the gate is active (i.e. not under reduced-motion).
+      const pre = document.getElementById('preloader');
+      if (pre && document.documentElement.classList.contains('is-loading')) {
+        const done = () => {
+          pre.classList.add('is-done');
+          document.documentElement.classList.remove('is-loading');
+          pre.addEventListener('transitionend', () => pre.remove(), { once: true });
+        };
+        if (document.readyState === 'complete') setTimeout(done, 450);
+        else window.addEventListener('load', () => setTimeout(done, 350));
+      }
+    </script>
   </body>
 </html>
