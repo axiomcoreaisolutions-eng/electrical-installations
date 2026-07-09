@@ -1,13 +1,12 @@
 ---
 import type { heroContent } from '../content/defaults';
-import { getSiteSettings, getCategories } from '../lib/content';
+import { getCategories } from '../lib/content';
 
 interface Props {
   hero: typeof heroContent;
 }
 
 const { hero } = Astro.props;
-const settings = await getSiteSettings();
 const categories = await getCategories();
 const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
 ---
@@ -44,16 +43,7 @@ const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
   </div>
 
   <!-- Content -->
-  <div class="relative z-10 mx-auto flex min-h-[100svh] max-w-[1400px] flex-col px-5 pt-24 pb-0 md:px-8 md:pt-28">
-    <!-- Instrument label row -->
-    <div
-      data-hero-seq
-      class="flex flex-wrap items-baseline justify-between gap-3 border-b border-white/15 pb-4 font-mono text-[0.72rem] font-medium tracking-[0.16em] text-mist uppercase"
-    >
-      <span>Tehnički sustavi - Zagreb</span>
-      <span>Od {settings.foundedYear}.</span>
-    </div>
-
+  <div class="relative z-10 mx-auto flex min-h-[100svh] max-w-[1400px] flex-col px-5 pt-28 pb-0 md:px-8 md:pt-32">
     <div class="flex flex-1 flex-col justify-center py-12">
       <p data-hero-seq class="mb-6 flex items-center gap-3 font-mono text-[0.75rem] tracking-[0.18em] text-mist uppercase">
         <span class="inline-block h-px w-8 bg-signal"></span>
