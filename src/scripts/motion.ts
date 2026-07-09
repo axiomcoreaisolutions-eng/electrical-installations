@@ -44,7 +44,8 @@ mm.add(
     // --- Display headings: character rise, masked by lines (hero + page H1s) ---
     const splits: SplitText[] = [];
     document.querySelectorAll<HTMLElement>('[data-split]').forEach((el) => {
-      const split = SplitText.create(el, { type: 'lines,chars', mask: 'lines' });
+      // Include 'words' so characters can't break mid-word (e.g. "Tehnič|ki").
+      const split = SplitText.create(el, { type: 'lines,words,chars', mask: 'lines' });
       splits.push(split);
       gsap.from(split.chars, {
         yPercent: 110,

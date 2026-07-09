@@ -58,9 +58,8 @@ const arrow = 'M2.5 7.5h10m0 0L8.75 3.75M12.5 7.5l-3.75 3.75';
           {homepage.categoriesSection.headline}
         </h2>
       </div>
-      <div class="mt-10">
+      <div class="mt-12 grid gap-4 sm:grid-cols-2">
         {categories.map((cat, i) => <FeatureRow category={cat} index={i} />)}
-        <div class="border-t border-line"></div>
       </div>
     </div>
   </section>
